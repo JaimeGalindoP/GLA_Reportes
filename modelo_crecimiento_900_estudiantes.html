@@ -1,0 +1,401 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.w{padding:1rem 0;font-family:var(--font-sans);}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;}
+.mv{font-size:22px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.div{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.25rem 0;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:1rem;}
+.ctl{display:flex;align-items:center;gap:12px;margin-bottom:.85rem;}
+.ctl label{font-size:12px;color:var(--color-text-secondary);min-width:190px;}
+.ctl input{flex:1;}
+.ctl span{font-size:12px;font-weight:500;min-width:38px;color:var(--color-text-primary);}
+.tbl{width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed;}
+.tbl th{color:var(--color-text-secondary);font-weight:500;padding:5px 6px 9px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:10px;text-align:center;}
+.tbl th.l{text-align:left;}
+.tbl td{padding:6px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);text-align:center;font-size:11px;vertical-align:middle;}
+.tbl td.l{text-align:left;font-weight:500;}
+.tbl tr:hover td{background:var(--color-background-secondary);}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.p-r{background:#FCEBEB;color:#A32D2D;}
+.p-g{background:#EAF3DE;color:#3B6D11;}
+.p-a{background:#FAEEDA;color:#854F0B;}
+.p-b{background:#E6F1FB;color:#185FA5;}
+.p-m{background:#EEEDFE;color:#3C3489;}
+.bar-bg{background:var(--color-background-secondary);border-radius:3px;height:7px;width:100%;}
+.bar-in{height:7px;border-radius:3px;}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;}
+.fbtn{font-size:11px;padding:5px 12px;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;}
+.fbtn.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+.ac{border-left:3px solid;padding:10px 14px;margin-bottom:8px;border-radius:0;}
+.ac-r{border-color:#E24B4A;background:#FCEBEB18;}
+.ac-a{border-color:#EF9F27;background:#FAEEDA18;}
+.ac-b{border-color:#378ADD;background:#E6F1FB18;}
+.ac-g{border-color:#639922;background:#EAF3DE18;}
+.at{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;}
+.as{font-size:11px;color:var(--color-text-secondary);line-height:1.5;}
+</style>
+
+<div class="w">
+
+<div class="sec">Cupos máximos reales · GLA 2026</div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;">
+  <div class="mc"><div class="ml">K3 y K4</div><div class="mv">15</div><div class="ms">máx/curso</div></div>
+  <div class="mc"><div class="ml">K5</div><div class="mv">20</div><div class="ms">máx/curso</div></div>
+  <div class="mc"><div class="ml">Grado 1°</div><div class="mv">25</div><div class="ms">máx/curso</div></div>
+  <div class="mc"><div class="ml">2° en adelante</div><div class="mv">28</div><div class="ms">ideal/curso</div></div>
+  <div class="mc"><div class="ml">Bachillerato</div><div class="mv" style="color:#888;">Solo excep.</div><div class="ms">política del colegio</div></div>
+</div>
+
+<div class="sec">Parámetros del modelo</div>
+<div class="card">
+  <div class="ctl"><label>Nuevos inscritos primaria 2026</label><input type="range" id="np26" min="30" max="180" step="1" value="130"><span id="np26v">130</span></div>
+  <div class="ctl"><label>Nuevos inscritos infantil 2026</label><input type="range" id="ni26" min="5" max="60" step="1" value="40"><span id="ni26v">40</span></div>
+  <div class="ctl"><label>Nuevos bachillerato 2026 (excepcional)</label><input type="range" id="nb26" min="0" max="20" step="1" value="5"><span id="nb26v">5</span></div>
+  <div class="ctl"><label>Tasa retiros voluntarios 2026 (%)</label><input type="range" id="r26" min="3" max="15" step="1" value="10"><span id="r26v">10%</span></div>
+  <div class="ctl"><label>Tasa retiros voluntarios 2027 (%)</label><input type="range" id="r27" min="3" max="15" step="1" value="8"><span id="r27v">8%</span></div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:1rem;">
+    <div class="mc"><div class="ml">Total nuevos 2026</div><div class="mv" id="tn26">175</div><div class="ms">infantil+primaria+excep.</div></div>
+    <div class="mc"><div class="ml">Total fin 2026</div><div class="mv" id="tot26">831</div><div class="ms" id="dif26">netos</div></div>
+    <div class="mc"><div class="ml">Total fin 2027</div><div class="mv" id="tot27">—</div><div class="ms" id="dif27">proyectado</div></div>
+    <div class="mc"><div class="ml">Meta 900</div><div class="mv" id="metayr" style="color:#639922;">2027</div><div class="ms" id="metasub">Se alcanza</div></div>
+  </div>
+</div>
+
+<div class="div"></div>
+<div class="sec">Proyección total · 2025 → 2028</div>
+<div style="position:relative;width:100%;height:260px;margin-bottom:1rem;"><canvas id="mainChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:1.5rem;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Escenario simulado</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;"></span>Sin acción</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#639922;"></span>Meta 900</span>
+</div>
+
+<div class="div"></div>
+<div class="sec">Mapa por grado · cupos disponibles y enfoque de captación</div>
+<div class="filter-row">
+  <button class="fbtn on" onclick="filtrar('todos',this)">Todos</button>
+  <button class="fbtn" onclick="filtrar('infantil',this)">Infantil</button>
+  <button class="fbtn" onclick="filtrar('primaria',this)">Primaria</button>
+  <button class="fbtn" onclick="filtrar('bachillerato',this)">Bachillerato</button>
+  <button class="fbtn" onclick="filtrar('prioridad',this)">Solo prioritarios</button>
+</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl" id="gradoTbl">
+<thead><tr>
+  <th class="l" style="width:9%;">Grado</th>
+  <th style="width:6%;">Cursos</th>
+  <th style="width:8%;">Est. 2026</th>
+  <th style="width:8%;">Máx/curso</th>
+  <th style="width:8%;">Cap.</th>
+  <th style="width:8%;">Libres</th>
+  <th style="width:11%;">Ocupación</th>
+  <th style="width:9%;">Captación</th>
+  <th style="width:13%;">Enfoque</th>
+  <th style="width:20%;">Acción prioritaria</th>
+</tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">Cupos disponibles por ciclo</div>
+<div style="position:relative;width:100%;height:240px;margin-bottom:1rem;"><canvas id="cuposChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:1.5rem;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Estudiantes actuales</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C0DD97;"></span>Cupos disponibles</span>
+</div>
+
+<div class="div"></div>
+<div class="sec">Ruta a 900 · aporte por ciclo</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl">
+<thead><tr>
+  <th class="l" style="width:20%;">Ciclo</th>
+  <th style="width:11%;">Est. 2026</th>
+  <th style="width:11%;">Cap. máx.</th>
+  <th style="width:11%;">Libres</th>
+  <th style="width:11%;">Meta nuevos</th>
+  <th style="width:18%;">Estrategia</th>
+  <th style="width:18%;">Estado</th>
+</tr></thead>
+<tbody id="cicloBody"></tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">¿Qué implica pasar de 77 a 200 inscritos? · el embudo</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl" id="embudoTbl">
+<thead><tr>
+  <th class="l" style="width:38%;">Etapa del embudo</th>
+  <th style="width:15%;">2025 real</th>
+  <th style="width:15%;">Meta 2026</th>
+  <th style="width:12%;">Cambio</th>
+  <th style="width:20%;">Palanca</th>
+</tr></thead>
+<tbody id="embudoBody"></tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">Presupuesto de pauta optimizado · con CPL objetivo $10,000 COP</div>
+<div class="g4">
+  <div class="mc"><div class="ml">CPL 2025 (real)</div><div class="mv" style="color:#E24B4A;">$20,149</div><div class="ms">COP por lead</div></div>
+  <div class="mc"><div class="ml">CPL objetivo 2026</div><div class="mv" style="color:#639922;">$10,000</div><div class="ms">COP por lead (−50%)</div></div>
+  <div class="mc"><div class="ml">Leads necesarios</div><div class="mv" id="leadsNec">1,100</div><div class="ms">Para 200 matrículas</div></div>
+  <div class="mc"><div class="ml">Presupuesto estimado</div><div class="mv" id="presup">$11.0M</div><div class="ms" id="presupSub">COP · ahorro vs 2025</div></div>
+</div>
+<div style="position:relative;width:100%;height:200px;margin-bottom:1rem;"><canvas id="presupChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:1rem;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;"></span>Inversión real 2025 ($6.8M · 339 leads)</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Presupuesto necesario 2026</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#639922;"></span>Eficiencia: leads por millón COP</span>
+</div>
+
+<div class="div"></div>
+<div class="sec">Las 4 palancas · sin las 4 juntas no se llega a 900</div>
+<div class="ac ac-r">
+  <div class="at">Palanca 1 · Retención (la más urgente)</div>
+  <div class="as">Cada estudiante retenido vale el doble que uno nuevo: no hay costo de captación. Con 10% de retiros sobre 840 = 84 salidas. Reducir al 6% salvaría ~34 estudiantes adicionales. Prioridad: grados 3°, K4, 1B y transición a bachillerato. Acción clave: protocolo de intervención preventiva 30 días antes de los picos (diciembre y enero).</div>
+</div>
+<div class="ac ac-a">
+  <div class="at">Palanca 2 · Conversión del embudo (la más eficiente)</div>
+  <div class="as">Pasar de 26.4% a 35% en lead→proceso y de 53.8% a 60% en proceso→matrícula sin aumentar un solo lead daría ~113 inscritos vs. 77 (47% más). Velocidad de respuesta al lead (&lt;2h) y calidad de la visita son los dos aceleradores con mayor ROI inmediato. Implementar protocolo de visita de 45 min y grabación de cierres.</div>
+</div>
+<div class="ac ac-b">
+  <div class="at">Palanca 3 · Captación digital (la más costosa — pero optimizable)</div>
+  <div class="as">Con CPL objetivo de $10,000 COP (vs. $20,149 actual), el presupuesto necesario cae a la mitad para generar los mismos leads. Claves: formularios nativos de Meta, escalar conjunto "Intereses" ($8,967 CPL), pausar anuncios con CPL &gt;$20K, reactivar 10,000 leads fríos en Clientify sin costo adicional de pauta.</div>
+</div>
+<div class="ac ac-g">
+  <div class="at">Palanca 4 · Pipeline interno Little Genius (la más subestimada)</div>
+  <div class="as">En 2024, 31 niños del Preescolar Los Andes transitaron al colegio. Con K3 activo y cupos disponibles en K3 (9 libres) y K4 (7 libres), el pipeline infantil puede generar 30–40 inscritos/año sin pauta digital. Jornada de familias en mayo + seguimiento activo desde el primer semestre = el CAC más bajo de todo el embudo.</div>
+</div>
+
+<div class="div"></div>
+<div class="sec">Métricas semáforo · revisar cada viernes</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl">
+<thead><tr>
+  <th class="l" style="width:32%;">Métrica</th>
+  <th style="width:16%;">Actual 2025</th>
+  <th style="width:17%;">Alerta</th>
+  <th style="width:17%;">OK</th>
+  <th style="width:18%;">Responsable</th>
+</tr></thead>
+<tbody>
+  <tr><td class="l">Inscritos acumulados (mes)</td><td style="color:var(--color-text-secondary);">—</td><td><span class="pill p-a">&lt;14/mes</span></td><td><span class="pill p-g">≥17/mes</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Alejandra</td></tr>
+  <tr style="background:var(--color-background-secondary);"><td class="l">Leads semanales</td><td style="color:var(--color-text-secondary);">~10/sem</td><td><span class="pill p-a">&lt;18/sem</span></td><td><span class="pill p-g">≥22/sem</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Jaime / Agencia</td></tr>
+  <tr><td class="l">CPL semanal (COP)</td><td style="color:#E24B4A;font-weight:500;">$20,149</td><td><span class="pill p-a">$12–20K</span></td><td><span class="pill p-g">&lt;$10K</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Agencia / Jaime</td></tr>
+  <tr style="background:var(--color-background-secondary);"><td class="l">CTR anuncios Meta</td><td style="color:#E24B4A;font-weight:500;">0.74%</td><td><span class="pill p-a">1.0–1.5%</span></td><td><span class="pill p-g">≥1.5%</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Agencia</td></tr>
+  <tr><td class="l">% leads calificados</td><td style="color:var(--color-text-secondary);">61%</td><td><span class="pill p-a">61–70%</span></td><td><span class="pill p-g">≥75%</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Alejandra / Jaime</td></tr>
+  <tr style="background:var(--color-background-secondary);"><td class="l">Tiempo respuesta lead</td><td style="color:#E24B4A;font-weight:500;">Sin dato</td><td><span class="pill p-a">2–4h</span></td><td><span class="pill p-g">&lt;2h</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Alejandra / Practicante</td></tr>
+  <tr><td class="l">Conv. proceso → matrícula</td><td style="color:var(--color-text-secondary);">53.8%</td><td><span class="pill p-a">54–59%</span></td><td><span class="pill p-g">≥60%</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Alejandra</td></tr>
+  <tr style="background:var(--color-background-secondary);"><td class="l">Alertas retiro activas</td><td style="color:#E24B4A;font-weight:500;">34 en riesgo</td><td><span class="pill p-a">11–20</span></td><td><span class="pill p-g">&lt;10</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Rectoría / Alejandra</td></tr>
+  <tr><td class="l">Reactivaciones base fría (Clientify)</td><td style="color:var(--color-text-secondary);">0 activas</td><td><span class="pill p-a">&lt;50/sem</span></td><td><span class="pill p-g">≥100/sem</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Jaime</td></tr>
+  <tr style="background:var(--color-background-secondary);"><td class="l">Play Days realizados / mes</td><td style="color:var(--color-text-secondary);">—</td><td><span class="pill p-a">0 ese mes</span></td><td><span class="pill p-g">≥1/mes</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Alejandra</td></tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const BASE=840, GRAD11=60;
+const CPL_OBJ=10000, CPL_2025=20149, GASTO_2025=6800000, LEADS_2025=339;
+const CONV_LP=0.35, CONV_PM=0.60;
+
+const grados=[
+  {g:'K3', cursos:1,est:6,  maxC:15,ciclo:'infantil',    prioridad:true, captacion:'Alta',   enfoque:'Pipeline Little Genius',         accion:'Llenar urgente — solo 6/15 cupos'},
+  {g:'K4', cursos:1,est:8,  maxC:15,ciclo:'infantil',    prioridad:true, captacion:'Alta',   enfoque:'Pipeline Little Genius',         accion:'Meta: 15. Jornada familias mayo'},
+  {g:'K5', cursos:1,est:20, maxC:20,ciclo:'infantil',    prioridad:false,captacion:'Media',  enfoque:'Transición K4→K5',               accion:'Casi lleno. Asegurar renovación'},
+  {g:'1°', cursos:2,est:48, maxC:25,ciclo:'primaria',    prioridad:true, captacion:'Alta',   enfoque:'Puerta principal — pauta+Play Day',accion:'16 cupos libres. Meta: 60-62 est.'},
+  {g:'2°', cursos:2,est:41, maxC:28,ciclo:'primaria',    prioridad:true, captacion:'Alta',   enfoque:'Grado más débil — campaña específica',accion:'15 cupos. Campaña diferenciada'},
+  {g:'3°', cursos:2,est:47, maxC:28,ciclo:'primaria',    prioridad:true, captacion:'Media',  enfoque:'Retención + captación moderada', accion:'9 cupos. Mayor retiro histórico'},
+  {g:'4°', cursos:3,est:76, maxC:28,ciclo:'primaria',    prioridad:false,captacion:'Baja',   enfoque:'Retención prioritaria',          accion:'8 cupos. 15 retiros 2024 — retener'},
+  {g:'5°', cursos:4,est:95, maxC:28,ciclo:'primaria',    prioridad:false,captacion:'Baja',   enfoque:'Retención + cierre de cupos',    accion:'17 cupos. Mantener y completar'},
+  {g:'6°', cursos:3,est:81, maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'Excep.', enfoque:'Solo retención',                 accion:'3 cupos. No captar externamente'},
+  {g:'7°', cursos:4,est:110,maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'Excep.', enfoque:'Solo retención',                 accion:'Casi lleno. Consolidar convivencia'},
+  {g:'8°', cursos:4,est:102,maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'Excep.', enfoque:'Solo retención',                 accion:'Refuerzo inglés/mat antes de 9°'},
+  {g:'9°', cursos:3,est:86, maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'No',     enfoque:'Solo retención',                 accion:'Caída 8°→9°: contener deserción'},
+  {g:'10°',cursos:3,est:60, maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'No',     enfoque:'Solo retención',                 accion:'Caída 9°→10°: comunicar valor'},
+  {g:'11°',cursos:3,est:60, maxC:28,ciclo:'bachillerato',prioridad:false,captacion:'No',     enfoque:'Programa recomendados',          accion:'60 graduados 2026 — embajadores'},
+];
+
+function capG(g){return g.cursos*g.maxC;}
+function libreG(g){return Math.max(0,capG(g)-g.est);}
+function pctG(g){return Math.round(g.est/capG(g)*100);}
+
+const capColor={'Alta':'#185FA5','Media':'#854F0B','Baja':'#3B6D11','Excep.':'#3C3489','No':'#888'};
+const capBg={'Alta':'#E6F1FB','Media':'#FAEEDA','Baja':'#EAF3DE','Excep.':'#EEEDFE','No':'#F2F2F2'};
+
+function buildTable(filter){
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  const data=filter==='todos'?grados:filter==='prioridad'?grados.filter(g=>g.prioridad):grados.filter(g=>g.ciclo===filter);
+  data.forEach(g=>{
+    const L=libreG(g),P=pctG(g);
+    const barCol=P>=95?'#639922':P>=75?'#EF9F27':'#E24B4A';
+    const lCol=L>10?'#3B6D11':L>3?'#854F0B':'#888';
+    tb.innerHTML+=`<tr>
+      <td class="l">${g.g}</td><td>${g.cursos}</td><td>${g.est}</td><td>${g.maxC}</td><td>${capG(g)}</td>
+      <td style="color:${lCol};font-weight:500;">${L}</td>
+      <td><div style="display:flex;align-items:center;gap:4px;"><div class="bar-bg"><div class="bar-in" style="width:${Math.min(P,100)}%;background:${barCol};"></div></div><span style="font-size:10px;color:var(--color-text-secondary);min-width:26px;">${P}%</span></div></td>
+      <td><span class="pill" style="background:${capBg[g.captacion]};color:${capColor[g.captacion]};">${g.captacion}</span></td>
+      <td style="font-size:10px;color:var(--color-text-secondary);">${g.enfoque}</td>
+      <td style="font-size:10px;color:var(--color-text-secondary);">${g.accion}</td>
+    </tr>`;
+  });
+}
+function filtrar(f,btn){document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');buildTable(f);}
+buildTable('todos');
+
+function calcTotales(np26,ni26,nb26,r26,r27){
+  const n26=np26+ni26+nb26;
+  const ret26=Math.round((BASE-GRAD11)*r26/100);
+  const end26=BASE-GRAD11-ret26+n26;
+  const ret27=Math.round(end26*r27/100);
+  const n27est=Math.round(n26*1.1);
+  const end27=end26-ret27+n27est;
+  const n28est=Math.round(n27est*1.05);
+  const ret28=Math.round(end27*Math.max(r27-2,3)/100);
+  const end28=end27-ret28+n28est;
+  const noAct26=BASE-GRAD11-ret26;
+  const noAct27=noAct26-Math.round(noAct26*r27/100);
+  const noAct28=noAct27-Math.round(noAct27*Math.max(r27-2,3)/100);
+  return{n26,ret26,end26,ret27,end27,n28est,end28,noAct26,noAct27,noAct28};
+}
+
+function update(){
+  const np26=+document.getElementById('np26').value;
+  const ni26=+document.getElementById('ni26').value;
+  const nb26=+document.getElementById('nb26').value;
+  const r26=+document.getElementById('r26').value;
+  const r27=+document.getElementById('r27').value;
+  document.getElementById('np26v').textContent=np26;
+  document.getElementById('ni26v').textContent=ni26;
+  document.getElementById('nb26v').textContent=nb26;
+  document.getElementById('r26v').textContent=r26+'%';
+  document.getElementById('r27v').textContent=r27+'%';
+
+  const {n26,ret26,end26,ret27,end27,n28est,end28,noAct26,noAct27,noAct28}=calcTotales(np26,ni26,nb26,r26,r27);
+
+  document.getElementById('tn26').textContent=n26;
+  document.getElementById('tot26').textContent=end26;
+  document.getElementById('tot26').style.color=end26>=900?'#639922':end26>=800?'#BA7517':'#E24B4A';
+  document.getElementById('dif26').textContent=(end26-BASE>=0?'+':'')+(end26-BASE)+' netos vs 2025';
+  document.getElementById('tot27').textContent=end27;
+  document.getElementById('tot27').style.color=end27>=900?'#639922':end27>=800?'#BA7517':'#E24B4A';
+  document.getElementById('dif27').textContent=(end27-end26>=0?'+':'')+(end27-end26)+' netos vs 2026';
+  const yr=end26>=900?'2026':end27>=900?'2027':end28>=900?'2028':'Revisar';
+  document.getElementById('metayr').textContent=yr;
+  document.getElementById('metayr').style.color=yr==='Revisar'?'#E24B4A':'#639922';
+  document.getElementById('metasub').textContent=yr==='Revisar'?'Aumentar captación':'Meta 900 alcanzada';
+
+  chart.data.datasets[0].data=[BASE,end26,end27,end28];
+  chart.data.datasets[1].data=[BASE,noAct26,noAct27,noAct28];
+  chart.update('none');
+
+  // Embudo dinámico
+  const leadsNec=Math.ceil(n26/(CONV_LP*CONV_PM));
+  const presupuesto=leadsNec*CPL_OBJ;
+  const presupuesto2025=LEADS_2025*CPL_2025;
+  document.getElementById('leadsNec').textContent=leadsNec.toLocaleString('es-CO');
+  document.getElementById('presup').textContent='$'+(presupuesto/1000000).toFixed(1)+'M';
+  const ahorro=presupuesto2025-presupuesto;
+  document.getElementById('presupSub').textContent=ahorro>0?'COP · ahorro $'+(ahorro/1000000).toFixed(1)+'M vs 2025':'COP · más que 2025';
+
+  presupChart.data.datasets[0].data=[
+    Math.round(GASTO_2025/1000000*10)/10,
+    Math.round(presupuesto/1000000*10)/10
+  ];
+  presupChart.data.datasets[1].data=[
+    Math.round(LEADS_2025/(GASTO_2025/1000000)),
+    Math.round(leadsNec/(presupuesto/1000000))
+  ];
+  presupChart.update('none');
+
+  document.getElementById('embudoBody').innerHTML=`
+    <tr><td class="l">Leads CRM necesarios</td><td>${LEADS_2025.toLocaleString('es-CO')}</td><td style="font-weight:500;">${leadsNec.toLocaleString('es-CO')}</td><td><span class="pill p-a">×${(leadsNec/LEADS_2025).toFixed(1)}</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Pauta Meta + reactivación Clientify</td></tr>
+    <tr style="background:var(--color-background-secondary);"><td class="l">Conv. lead → proceso (26.4%→35%)</td><td>143</td><td style="font-weight:500;">${Math.round(leadsNec*0.35)}</td><td><span class="pill p-a">×${(Math.round(leadsNec*0.35)/143).toFixed(1)}</span></td><td style="font-size:10px;color:var(--color-text-secondary);">CRM + respuesta &lt;2h + protocolo visita</td></tr>
+    <tr><td class="l">Conv. proceso → matrícula (53.8%→60%)</td><td>77</td><td style="font-weight:500;">${n26}</td><td><span class="pill p-g">×${(n26/77).toFixed(1)}</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Closers + grabación cierres + Noche Familias</td></tr>
+    <tr style="background:var(--color-background-secondary);"><td class="l">CPL objetivo (COP)</td><td style="color:#E24B4A;">$${CPL_2025.toLocaleString('es-CO')}</td><td style="font-weight:500;color:#639922;">$${CPL_OBJ.toLocaleString('es-CO')}</td><td><span class="pill p-g">−50%</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Formularios nativos Meta + escalar conjunto Intereses</td></tr>
+    <tr><td class="l">Presupuesto pauta estimado</td><td style="color:var(--color-text-secondary);">$${(GASTO_2025/1000000).toFixed(1)}M COP</td><td style="font-weight:500;color:#639922;">$${(presupuesto/1000000).toFixed(1)}M COP</td><td><span class="${presupuesto<GASTO_2025?'pill p-g':'pill p-a'}">${presupuesto<GASTO_2025?'−':'+'} $${(Math.abs(presupuesto-GASTO_2025)/1000000).toFixed(1)}M</span></td><td style="font-size:10px;color:var(--color-text-secondary);">Con CPL optimizado a $10,000</td></tr>
+  `;
+
+  // Ciclo body
+  const iEst=grados.filter(g=>g.ciclo==='infantil').reduce((s,g)=>s+g.est,0);
+  const iCap=grados.filter(g=>g.ciclo==='infantil').reduce((s,g)=>s+capG(g),0);
+  const pEst=grados.filter(g=>g.ciclo==='primaria').reduce((s,g)=>s+g.est,0);
+  const pCap=grados.filter(g=>g.ciclo==='primaria').reduce((s,g)=>s+capG(g),0);
+  const bEst=grados.filter(g=>g.ciclo==='bachillerato').reduce((s,g)=>s+g.est,0);
+  const ciclos=[
+    {nombre:'Infantil (K3–K5)',est:iEst,cap:iCap,meta:ni26,estrategia:'Little Genius + jardines aliados',col:'#185FA5',bg:'#E6F1FB'},
+    {nombre:'Primaria (1°–5°)',est:pEst,cap:pCap,meta:np26,estrategia:'Pauta Meta + Play Day + CRM',col:'#3B6D11',bg:'#EAF3DE'},
+    {nombre:'Bachillerato (6°–11°)',est:bEst,cap:bEst+nb26,meta:nb26,estrategia:'Solo retención + referidos',col:'#854F0B',bg:'#FAEEDA'},
+  ];
+  document.getElementById('cicloBody').innerHTML=ciclos.map((c,i)=>{
+    const L=Math.max(0,c.cap-c.est);
+    const ok=c.meta<=L;
+    return`<tr style="${i%2===1?'background:var(--color-background-secondary)':''}">
+      <td class="l">${c.nombre}</td><td>${c.est}</td><td>${c.cap}</td>
+      <td style="color:${L>20?'#3B6D11':L>5?'#854F0B':'#888'};font-weight:500;">${L}</td>
+      <td style="color:${c.col};font-weight:500;">${c.meta}</td>
+      <td style="font-size:10px;color:var(--color-text-secondary);">${c.estrategia}</td>
+      <td><span class="pill" style="background:${ok?'#EAF3DE':'#FCEBEB'};color:${ok?'#3B6D11':'#A32D2D'};">${ok?'Cabe en cupos':'Supera capacidad'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+['np26','ni26','nb26','r26','r27'].forEach(id=>document.getElementById(id).addEventListener('input',update));
+
+const ctx1=document.getElementById('mainChart').getContext('2d');
+const chart=new Chart(ctx1,{
+  type:'line',
+  data:{labels:['2025','2026','2027','2028'],datasets:[
+    {label:'Simulado',data:[840,831,950,1020],borderColor:'#378ADD',backgroundColor:'#378ADD18',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#378ADD',tension:.3,fill:true},
+    {label:'Sin acción',data:[840,702,630,570],borderColor:'#E24B4A',borderDash:[5,4],borderWidth:1.5,pointRadius:4,pointBackgroundColor:'#E24B4A',tension:.3,fill:false},
+    {label:'Meta 900',data:[900,900,900,900],borderColor:'#639922',borderDash:[3,3],borderWidth:1.5,pointRadius:0,fill:false},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{color:'#888',font:{size:12}}},y:{min:550,max:1080,grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}}}}}
+});
+
+const ctx2=document.getElementById('cuposChart').getContext('2d');
+new Chart(ctx2,{
+  type:'bar',
+  data:{labels:grados.map(g=>g.g),datasets:[
+    {label:'Actuales',data:grados.map(g=>g.est),backgroundColor:'#378ADD',borderRadius:3,stack:'a'},
+    {label:'Cupos libres',data:grados.map(g=>libreG(g)),backgroundColor:'#C0DD97',borderRadius:3,stack:'a'},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11},autoSkip:false,maxRotation:0}},
+            y:{stacked:true,grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}},max:120}}}
+});
+
+const ctx3=document.getElementById('presupChart').getContext('2d');
+const presupChart=new Chart(ctx3,{
+  type:'bar',
+  data:{
+    labels:['2025 (real)','2026 (optimizado)'],
+    datasets:[
+      {label:'Inversión ($M COP)',data:[6.8,11.0],backgroundColor:['#E24B4A','#378ADD'],borderRadius:4,yAxisID:'y'},
+      {label:'Leads por $1M invertido',data:[Math.round(LEADS_2025/(GASTO_2025/1000000)),100],backgroundColor:['#F0959580','#97C45980'],borderRadius:4,yAxisID:'y2'},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{
+      x:{grid:{display:false},ticks:{color:'#888',font:{size:12}}},
+      y:{position:'left',grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11},callback:v=>'$'+v+'M'},title:{display:true,text:'Inversión ($M)',color:'#888',font:{size:10}}},
+      y2:{position:'right',grid:{display:false},ticks:{color:'#888',font:{size:11},callback:v=>v+' leads/M'},title:{display:true,text:'Eficiencia',color:'#888',font:{size:10}}}
+    }}
+});
+
+update();
+</script>

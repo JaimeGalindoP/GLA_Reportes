@@ -1,0 +1,292 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);}
+.w{padding:1rem 0;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:22px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.div{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.25rem 0;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:1rem;}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;}
+.filter-btn{font-size:11px;padding:5px 12px;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;}
+.filter-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+.tbl{width:100%;font-size:12px;border-collapse:collapse;}
+.tbl th{color:var(--color-text-secondary);font-weight:500;text-align:left;padding:5px 8px 9px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle;}
+.tbl td.r{text-align:right;}
+.tbl td.c{text-align:center;}
+.tbl tr:hover td{background:var(--color-background-secondary);}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.p-roj{background:#FCEBEB;color:#A32D2D;}
+.p-amb{background:#FAEEDA;color:#854F0B;}
+.p-vrd{background:#EAF3DE;color:#3B6D11;}
+.p-azu{background:#E6F1FB;color:#185FA5;}
+.p-mor{background:#EEEDFE;color:#3C3489;}
+.bar-wrap{background:var(--color-background-secondary);border-radius:3px;height:7px;width:100%;min-width:60px;}
+.bar-inner{height:7px;border-radius:3px;}
+.accion-box{border-left:3px solid;padding:9px 12px;margin-bottom:7px;border-radius:0;}
+.ac-r{border-color:#E24B4A;background:#FCEBEB18;}
+.ac-a{border-color:#EF9F27;background:#FAEEDA18;}
+.ac-v{border-color:#639922;background:#EAF3DE18;}
+.ac-b{border-color:#378ADD;background:#E6F1FB18;}
+.at{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
+.as{font-size:11px;color:var(--color-text-secondary);line-height:1.5;}
+.cap-badge{font-size:10px;color:var(--color-text-tertiary);margin-top:3px;}
+</style>
+
+<div class="w">
+
+<div class="sec">Capacidad real por ciclo · cupos máximos GLA</div>
+<div class="g4">
+  <div class="mc">
+    <div class="ml">K3 y K4</div>
+    <div class="mv" style="color:#185FA5;">15</div>
+    <div class="ms">máx. por curso</div>
+  </div>
+  <div class="mc">
+    <div class="ml">K5</div>
+    <div class="mv" style="color:#185FA5;">20</div>
+    <div class="ms">máx. por curso</div>
+  </div>
+  <div class="mc">
+    <div class="ml">Grado 1°</div>
+    <div class="mv" style="color:#185FA5;">25</div>
+    <div class="ms">máx. por curso</div>
+  </div>
+  <div class="mc">
+    <div class="ml">2° en adelante</div>
+    <div class="mv" style="color:#185FA5;">28</div>
+    <div class="ms">ideal por curso</div>
+  </div>
+</div>
+
+<div class="sec">Resumen ejecutivo · con cupos reales</div>
+<div class="g4">
+  <div class="mc"><div class="ml">Estudiantes actuales</div><div class="mv">840</div><div class="ms">Inicio 2026</div></div>
+  <div class="mc"><div class="ml">Capacidad total real</div><div class="mv" id="capTotal" style="color:#185FA5;">—</div><div class="ms">Con cupos reales</div></div>
+  <div class="mc"><div class="ml">Cupos libres totales</div><div class="mv" id="cuposLibres" style="color:#639922;">—</div><div class="ms">Sin abrir nuevos cursos</div></div>
+  <div class="mc"><div class="ml">Grados con mayor espacio</div><div class="mv" style="font-size:14px;color:#639922;" id="gradoTop">—</div><div class="ms">Foco de captación</div></div>
+</div>
+
+<div class="sec">Mapa por grado · estado, cupos reales y acción específica</div>
+<div class="filter-row">
+  <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+  <button class="filter-btn" onclick="filtrar('critico',this)">Crítico</button>
+  <button class="filter-btn" onclick="filtrar('oportunidad',this)">Oportunidad</button>
+  <button class="filter-btn" onclick="filtrar('retencion',this)">Retención</button>
+  <button class="filter-btn" onclick="filtrar('estable',this)">Estable</button>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl" id="gradoTbl">
+<thead>
+<tr>
+  <th>Grado</th>
+  <th class="c">Cursos</th>
+  <th class="c">Máx/curso</th>
+  <th class="c">Est. 2026</th>
+  <th class="c">Prom/curso</th>
+  <th class="c">Cap. total</th>
+  <th class="c">Cupos libres</th>
+  <th class="c">Ocupación</th>
+  <th class="c">Estado</th>
+  <th>Acción prioritaria</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">Ocupación por grado vs. capacidad real</div>
+<div style="position:relative;width:100%;height:340px;"><canvas id="ocupChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;margin-bottom:1.5rem;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Estudiantes actuales</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C0DD97;"></span>Cupos disponibles</span>
+</div>
+
+<div class="div"></div>
+<div class="sec">Acciones por segmento · con capacidad real</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.5rem;">
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Ciclo infantil · K3–K5</p>
+  <div class="accion-box ac-r">
+    <div class="at">K3 (6 est.) y K4 (8 est.) — cupo máx. 15</div>
+    <div class="as">Solo 9 y 7 cupos libres respectivamente. Capacidad mucho más limitada de lo que parecía con el modelo anterior. La meta real es llenar estos cursos: 15 estudiantes en K3 y 15 en K4. Pipeline Little Genius es la única fuente confiable.</div>
+  </div>
+  <div class="accion-box ac-a">
+    <div class="at">K5 (20 est.) — cupo máx. 20 · ya está lleno</div>
+    <div class="as">Con 20 estudiantes y cupo máximo de 20, K5 está a tope. No hay espacio para nuevos sin abrir un segundo curso. El crecimiento aquí es estructural, no de captación inmediata.</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Primaria · 1° a 5°</p>
+  <div class="accion-box ac-r">
+    <div class="at">1° (48 est., 2 cursos) — cupo máx. 25/curso</div>
+    <div class="as">Capacidad total: 50 estudiantes. Solo 2 cupos libres. Prácticamente lleno. Para crecer hay que abrir un tercer curso. Es el grado de mayor captación histórica — tiene demanda pero no tiene espacio sin decisión estructural.</div>
+  </div>
+  <div class="accion-box ac-r">
+    <div class="at">2° (41 est., 2 cursos) — cupo máx. 28/curso</div>
+    <div class="as">Capacidad total: 56. Quedan 15 cupos — el mayor espacio proporcional de primaria baja. Es el grado más débil en captación histórica (0 nuevos en 2025) pero tiene el mayor margen disponible. Oportunidad clara.</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Primaria alta · 4° y 5°</p>
+  <div class="accion-box ac-a">
+    <div class="at">4° (76 est., 3 cursos) · 5° (95 est., 4 cursos)</div>
+    <div class="as">4° tiene 8 cupos libres (28×3=84). 5° tiene 17 cupos libres (28×4=112). Zona estable con espacio moderado. Prioridad retención en 4° (15 retiros en 2024) antes de invertir en captación.</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Bachillerato · 6° a 11°</p>
+  <div class="accion-box ac-v">
+    <div class="at">6° a 9° — espacios disponibles reales</div>
+    <div class="as">Con máximo 28/curso: 6° tiene 3 cursos (84 cap, 81 est → 3 libres), 7° tiene 4 cursos (112 cap, 110 est → 2 libres), 8° tiene 4 cursos (112 cap, 102 est → 10 libres), 9° tiene 3 cursos (84 cap, 86 est → sobrepasado por 2).</div>
+  </div>
+  <div class="accion-box ac-r">
+    <div class="at">9° (86 est., 3 cursos) — 2 estudiantes sobre cupo</div>
+    <div class="as">Con 28×3=84 de capacidad y 86 estudiantes actuales, este grado ya está 2 por encima del ideal. Hay que decidir si se abre un 4° curso o se gestiona la transición natural a 10°.</div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+<div class="sec">Distribución de la meta de 200 nuevos · ajustada a capacidad real</div>
+<div style="position:relative;width:100%;height:220px;"><canvas id="metaChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Meta nuevos 2026</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;"></span>Cupos libres disponibles (sin abrir nuevos cursos)</span>
+</div>
+<p style="font-size:11px;color:var(--color-text-tertiary);margin-top:10px;">* Donde la meta supera los cupos libres, se necesita abrir nuevos cursos o redistribuir. La zona más crítica es 1° y K5.</p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const grados = [
+  { grado:'K3',  cursos:1, est:6,   maxC:15, retHist:1,  nuevosHist:6,  estado:'critico',     estadoLabel:'Crítico',     accion:'Pipeline Little Genius · meta: llenar a 15' },
+  { grado:'K4',  cursos:1, est:8,   maxC:15, retHist:4,  nuevosHist:8,  estado:'critico',     estadoLabel:'Crítico',     accion:'Pipeline jardín → colegio · meta: llenar a 15' },
+  { grado:'K5',  cursos:1, est:20,  maxC:20, retHist:1,  nuevosHist:20, estado:'estable',     estadoLabel:'Lleno',       accion:'Ya en capacidad máxima · crecer requiere 2° curso' },
+  { grado:'1°',  cursos:2, est:48,  maxC:25, retHist:3,  nuevosHist:17, estado:'critico',     estadoLabel:'Casi lleno',  accion:'Solo 2 cupos libres · abrir 3er curso para crecer' },
+  { grado:'2°',  cursos:2, est:41,  maxC:28, retHist:2,  nuevosHist:0,  estado:'oportunidad', estadoLabel:'Oportunidad', accion:'15 cupos libres · mayor margen de primaria baja' },
+  { grado:'3°',  cursos:2, est:47,  maxC:28, retHist:17, nuevosHist:0,  estado:'retencion',   estadoLabel:'Retención',   accion:'9 cupos · pero 17 retiros en 2024 — prioridad retención' },
+  { grado:'4°',  cursos:3, est:76,  maxC:28, retHist:15, nuevosHist:3,  estado:'retencion',   estadoLabel:'Retención',   accion:'8 cupos libres · retener antes de captar' },
+  { grado:'5°',  cursos:4, est:95,  maxC:28, retHist:5,  nuevosHist:6,  estado:'estable',     estadoLabel:'Estable',     accion:'17 cupos libres · captar 10 nuevos' },
+  { grado:'6°',  cursos:3, est:81,  maxC:28, retHist:3,  nuevosHist:0,  estado:'estable',     estadoLabel:'Estable',     accion:'3 cupos libres · convivencia como retención' },
+  { grado:'7°',  cursos:4, est:110, maxC:28, retHist:3,  nuevosHist:4,  estado:'estable',     estadoLabel:'Casi lleno',  accion:'2 cupos libres · grado más poblado, sostener' },
+  { grado:'8°',  cursos:4, est:102, maxC:28, retHist:12, nuevosHist:4,  estado:'retencion',   estadoLabel:'Retención',   accion:'10 cupos · refuerzo inglés/mat antes de 9°' },
+  { grado:'9°',  cursos:3, est:86,  maxC:28, retHist:5,  nuevosHist:1,  estado:'critico',     estadoLabel:'Sobre cupo',  accion:'2 estudiantes sobre ideal · evaluar 4° curso' },
+  { grado:'10°', cursos:3, est:60,  maxC:28, retHist:3,  nuevosHist:0,  estado:'retencion',   estadoLabel:'Retención',   accion:'24 cupos libres · comunicar valor del ciclo' },
+  { grado:'11°', cursos:3, est:60,  maxC:28, retHist:2,  nuevosHist:1,  estado:'estable',     estadoLabel:'Estable',     accion:'24 cupos · programa referidos en oct.' },
+];
+
+const estadoPill = (e,l) => {
+  const cls={critico:'p-roj',oportunidad:'p-amb',retencion:'p-mor',estable:'p-vrd'};
+  if(l==='Lleno') return `<span class="pill p-azu">${l}</span>`;
+  if(l==='Casi lleno') return `<span class="pill p-amb">${l}</span>`;
+  if(l==='Sobre cupo') return `<span class="pill p-roj">${l}</span>`;
+  return `<span class="pill ${cls[e]}">${l}</span>`;
+};
+
+function buildTable(filter){
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  const data=filter==='todos'?grados:grados.filter(g=>g.estado===filter);
+  data.forEach(g=>{
+    const cap=g.cursos*g.maxC;
+    const libre=cap-g.est;
+    const pctOc=Math.round(g.est/cap*100);
+    const barCol=pctOc>100?'#E24B4A':pctOc>=90?'#639922':pctOc>=70?'#EF9F27':'#E24B4A';
+    const libreCol=libre<0?'#A32D2D':libre>10?'#3B6D11':libre>3?'#BA7517':'#A32D2D';
+    tb.innerHTML+=`<tr>
+      <td><b>${g.grado}</b></td>
+      <td class="c">${g.cursos}</td>
+      <td class="c" style="color:#185FA5;font-weight:500;">${g.maxC}</td>
+      <td class="c">${g.est}</td>
+      <td class="c">${Math.round(g.est/g.cursos)}</td>
+      <td class="c">${cap}</td>
+      <td class="c" style="color:${libreCol};font-weight:500;">${libre<0?'<b>+'+Math.abs(libre)+' sobre</b>':libre}</td>
+      <td class="c">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="bar-wrap"><div class="bar-inner" style="width:${Math.min(pctOc,100)}%;background:${barCol};"></div></div>
+          <span style="font-size:11px;color:var(--color-text-secondary);min-width:34px;">${pctOc}%</span>
+        </div>
+      </td>
+      <td>${estadoPill(g.estado,g.estadoLabel)}</td>
+      <td style="font-size:11px;color:var(--color-text-secondary);">${g.accion}</td>
+    </tr>`;
+  });
+
+  const capTotal = grados.reduce((s,g)=>s+g.cursos*g.maxC,0);
+  const cuposLibres = grados.reduce((s,g)=>s+(g.cursos*g.maxC-g.est),0);
+  document.getElementById('capTotal').textContent = capTotal;
+  document.getElementById('cuposLibres').textContent = cuposLibres > 0 ? '+'+cuposLibres : cuposLibres;
+  document.getElementById('cuposLibres').style.color = cuposLibres > 50 ? '#639922' : cuposLibres > 20 ? '#BA7517' : '#E24B4A';
+
+  const topGrado = grados.slice().sort((a,b)=>(b.cursos*b.maxC-b.est)-(a.cursos*a.maxC-a.est))[0];
+  document.getElementById('gradoTop').textContent = topGrado.grado + ', 10°, 11°';
+}
+
+function filtrar(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildTable(f);
+}
+
+buildTable('todos');
+
+const labels = grados.map(g=>g.grado);
+const actuals = grados.map(g=>g.est);
+const libres = grados.map(g=>Math.max(0, g.cursos*g.maxC - g.est));
+
+new Chart(document.getElementById('ocupChart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      {label:'Actuales',data:actuals,backgroundColor:'#378ADD',borderRadius:3,stack:'a'},
+      {label:'Cupos libres',data:libres,backgroundColor:'#C0DD97',borderRadius:3,stack:'a'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{
+      label:ctx=>ctx.dataset.label+': '+ctx.raw
+    }}},
+    scales:{
+      x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11},autoSkip:false,maxRotation:0}},
+      y:{stacked:true,grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}},max:130}
+    }
+  }
+});
+
+const metaNuevos=[14,14,0,10,15,8,8,10,5,4,8,2,5,5];
+const cuposDisp = grados.map(g=>Math.max(0,g.cursos*g.maxC-g.est));
+
+new Chart(document.getElementById('metaChart'),{
+  type:'bar',
+  data:{
+    labels:['K3','K4','K5','1°','2°','3°','4°','5°','6°','7°','8°','9°','10°','11°'],
+    datasets:[
+      {label:'Meta nuevos 2026',data:metaNuevos,backgroundColor:'#378ADD',borderRadius:4},
+      {label:'Cupos libres disponibles',data:cuposDisp,backgroundColor:'#E24B4A',borderRadius:4,borderDash:[4,4]},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+    scales:{
+      x:{grid:{display:false},ticks:{color:'#888',font:{size:11},autoSkip:false,maxRotation:0}},
+      y:{grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}},max:30}
+    }
+  }
+});
+</script>

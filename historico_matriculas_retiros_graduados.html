@@ -1,0 +1,138 @@
+
+<div style="padding: 1rem 0;">
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1.5rem;">
+  <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; flex: 1; min-width: 130px;">
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Pico histórico</div>
+    <div style="font-size: 22px; font-weight: 500; color: var(--color-text-primary);">1.117</div>
+    <div style="font-size: 12px; color: var(--color-text-secondary);">estudiantes · 2022</div>
+  </div>
+  <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; flex: 1; min-width: 130px;">
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Matrícula 2026</div>
+    <div style="font-size: 22px; font-weight: 500; color: var(--color-text-primary);">840</div>
+    <div style="font-size: 12px; color: var(--color-text-secondary);">–277 vs pico (–24,8%)</div>
+  </div>
+  <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; flex: 1; min-width: 130px;">
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Retiros 2025</div>
+    <div style="font-size: 22px; font-weight: 500; color: #a32d2d;">91</div>
+    <div style="font-size: 12px; color: var(--color-text-secondary);">vs 77 nuevos</div>
+  </div>
+  <div style="background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; flex: 1; min-width: 130px;">
+    <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px;">Pérdida neta 2025</div>
+    <div style="font-size: 22px; font-weight: 500; color: #a32d2d;">–163</div>
+    <div style="font-size: 12px; color: var(--color-text-secondary);">1.005 → 840</div>
+  </div>
+</div>
+
+<div style="display: flex; gap: 16px; margin-bottom: 12px; font-size: 12px; color: var(--color-text-secondary); flex-wrap: wrap;">
+  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #378ADD;"></span>Matrícula total inicio de año</span>
+  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #3B6D11;"></span>Estudiantes nuevos</span>
+  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #E24B4A;"></span>Retiros en el año</span>
+  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #BA7517;"></span>Graduados grado 11</span>
+</div>
+
+<div style="position: relative; width: 100%; height: 320px;">
+  <canvas id="chart1"></canvas>
+</div>
+
+<div style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 12px; color: var(--color-text-secondary);">Variación neta anual (nuevos − retiros − graduados)</div>
+<div style="position: relative; width: 100%; height: 130px;">
+  <canvas id="chart2"></canvas>
+</div>
+
+<div style="margin-top: 1.5rem; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed;">
+    <thead>
+      <tr style="background: var(--color-background-secondary);">
+        <th style="padding: 10px 12px; text-align: left; font-weight: 500; color: var(--color-text-secondary);">Año</th>
+        <th style="padding: 10px 8px; text-align: right; font-weight: 500; color: var(--color-text-secondary);">Matrícula inicio</th>
+        <th style="padding: 10px 8px; text-align: right; font-weight: 500; color: #185FA5;">Nuevos</th>
+        <th style="padding: 10px 8px; text-align: right; font-weight: 500; color: #a32d2d;">Retiros</th>
+        <th style="padding: 10px 8px; text-align: right; font-weight: 500; color: #854F0B;">Graduados</th>
+        <th style="padding: 10px 8px; text-align: right; font-weight: 500; color: var(--color-text-secondary);">Saldo neto</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div style="margin-top: 10px; font-size: 11px; color: var(--color-text-tertiary);">
+  * 2026: proyección con 840 estudiantes matriculados. Graduados 2025 estimados de grado 11 (≈100 est. 2023). Retiros 2025 incluyen no-continuidad 2026. Matrícula 2019-2021 no disponible en documentos analizados.
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const data = [
+  { year: '2022', matricula: 1117, nuevos: 123, retiros: 95,  graduados: 100, nota: '' },
+  { year: '2023', matricula: 1115, nuevos: 118, retiros: 117, graduados: 99,  nota: '' },
+  { year: '2024', matricula: 1011, nuevos: 92,  retiros: 106, graduados: 80,  nota: '' },
+  { year: '2025', matricula: 920,  nuevos: 77,  retiros: 91,  graduados: 60,  nota: '' },
+  { year: '2026*', matricula: 840, nuevos: null, retiros: null, graduados: null, nota: 'proyección' },
+];
+
+const labels = data.map(d => d.year);
+const matriculas = data.map(d => d.matricula);
+const nuevos = data.map(d => d.nuevos);
+const retiros = data.map(d => d.retiros);
+const graduados = data.map(d => d.graduados);
+const saldo = data.slice(0,-1).map(d => d.nuevos - d.retiros - d.graduados);
+
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [
+      { label: 'Matrícula inicio', data: matriculas, backgroundColor: 'rgba(55,138,221,0.15)', borderColor: '#378ADD', borderWidth: 2, type: 'line', fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#378ADD', yAxisID: 'y' },
+      { label: 'Nuevos', data: nuevos, backgroundColor: '#3B6D11', borderRadius: 3, yAxisID: 'y2' },
+      { label: 'Retiros', data: retiros, backgroundColor: '#E24B4A', borderRadius: 3, yAxisID: 'y2' },
+      { label: 'Graduados', data: graduados, backgroundColor: '#EF9F27', borderRadius: 3, yAxisID: 'y2' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+    scales: {
+      y: { position: 'left', min: 700, max: 1200, ticks: { font: { size: 11 }, color: '#378ADD' }, grid: { color: 'rgba(128,128,128,0.1)' } },
+      y2: { position: 'right', min: 0, max: 180, ticks: { font: { size: 11 } }, grid: { drawOnChartArea: false } },
+      x: { ticks: { font: { size: 12 }, autoSkip: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('chart2'), {
+  type: 'bar',
+  data: {
+    labels: data.slice(0,-1).map(d => d.year),
+    datasets: [{
+      data: saldo,
+      backgroundColor: saldo.map(v => v >= 0 ? '#639922' : '#E24B4A'),
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => (ctx.raw > 0 ? '+' : '') + ctx.raw + ' estudiantes' } } },
+    scales: {
+      y: { ticks: { font: { size: 11 }, callback: v => (v > 0 ? '+' : '') + v }, grid: { color: 'rgba(128,128,128,0.1)' } },
+      x: { ticks: { font: { size: 12 }, autoSkip: false } }
+    }
+  }
+});
+
+const tbody = document.getElementById('tableBody');
+data.forEach((d, i) => {
+  const net = d.nuevos !== null ? d.nuevos - d.retiros - (d.graduados||0) : null;
+  const netStr = net !== null ? (net > 0 ? '+' + net : net) : '—';
+  const netColor = net === null ? '' : net >= 0 ? '#3B6D11' : '#a32d2d';
+  const bg = i % 2 === 0 ? '' : 'background: var(--color-background-secondary);';
+  tbody.innerHTML += `<tr style="${bg}">
+    <td style="padding: 9px 12px; font-weight: 500;">${d.year}</td>
+    <td style="padding: 9px 8px; text-align: right;">${d.matricula.toLocaleString()}</td>
+    <td style="padding: 9px 8px; text-align: right; color: #185FA5;">${d.nuevos !== null ? d.nuevos : '—'}</td>
+    <td style="padding: 9px 8px; text-align: right; color: #a32d2d;">${d.retiros !== null ? d.retiros : '—'}</td>
+    <td style="padding: 9px 8px; text-align: right; color: #854F0B;">${d.graduados !== null ? '~' + d.graduados : '—'}</td>
+    <td style="padding: 9px 8px; text-align: right; font-weight: 500; color: ${netColor};">${netStr}</td>
+  </tr>`;
+});
+</script>

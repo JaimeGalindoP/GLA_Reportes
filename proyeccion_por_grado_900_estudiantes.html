@@ -1,0 +1,270 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);}
+.w{padding:1rem 0;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:22px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.div{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.25rem 0;}
+.tbl{width:100%;font-size:12px;border-collapse:collapse;}
+.tbl th{color:var(--color-text-secondary);font-weight:500;text-align:left;padding:5px 8px 9px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;}
+.tbl td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top;}
+.tbl td.r{text-align:right;}
+.tbl td.c{text-align:center;}
+.tbl tr:hover td{background:var(--color-background-secondary);}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+.p-roj{background:#FCEBEB;color:#A32D2D;}
+.p-amb{background:#FAEEDA;color:#854F0B;}
+.p-vrd{background:#EAF3DE;color:#3B6D11;}
+.p-azu{background:#E6F1FB;color:#185FA5;}
+.p-mor{background:#EEEDFE;color:#3C3489;}
+.bar-wrap{background:var(--color-background-secondary);border-radius:3px;height:7px;width:100%;min-width:60px;}
+.bar-inner{height:7px;border-radius:3px;}
+.accion-box{border-left:3px solid;padding:9px 12px;margin-bottom:7px;border-radius:0;}
+.ac-r{border-color:#E24B4A;background:#FCEBEB18;}
+.ac-a{border-color:#EF9F27;background:#FAEEDA18;}
+.ac-v{border-color:#639922;background:#EAF3DE18;}
+.ac-b{border-color:#378ADD;background:#E6F1FB18;}
+.at{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
+.as{font-size:11px;color:var(--color-text-secondary);line-height:1.5;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:1rem;}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;}
+.filter-btn{font-size:11px;padding:5px 12px;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;}
+.filter-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);}
+</style>
+
+<div class="w">
+
+<div class="sec">Resumen ejecutivo · distribución 2026</div>
+<div class="g4">
+  <div class="mc"><div class="ml">Total estudiantes</div><div class="mv">840</div><div class="ms">36 cursos activos</div></div>
+  <div class="mc"><div class="ml">Cupos disponibles</div><div class="mv" style="color:#639922;">+288</div><div class="ms">Hasta cap. máx. 32/curso</div></div>
+  <div class="mc"><div class="ml">Grados con &lt;20 est/curso</div><div class="mv" style="color:#E24B4A;">K3, K4, K5, 2°</div><div class="ms">Captación urgente</div></div>
+  <div class="mc"><div class="ml">Meta nuevos 2026</div><div class="mv" style="color:#185FA5;">+200</div><div class="ms">Netos para ir a 900 en 2027</div></div>
+</div>
+
+<div class="sec">Mapa por grado · estado, cupos y acción específica</div>
+<div class="filter-row">
+  <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+  <button class="filter-btn" onclick="filtrar('critico',this)">Crítico</button>
+  <button class="filter-btn" onclick="filtrar('oportunidad',this)">Oportunidad captación</button>
+  <button class="filter-btn" onclick="filtrar('retencion',this)">Riesgo retención</button>
+  <button class="filter-btn" onclick="filtrar('estable',this)">Estable</button>
+</div>
+
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl" id="gradoTbl">
+<thead>
+<tr>
+  <th>Grado</th>
+  <th class="c">Cursos</th>
+  <th class="c">Est. 2026</th>
+  <th class="c">Prom/curso</th>
+  <th class="c">Cupos libres</th>
+  <th class="c">Ocupación</th>
+  <th class="c">Retiro hist.</th>
+  <th class="c">Nuevos hist.</th>
+  <th>Estado</th>
+  <th>Acción prioritaria</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">Gráfico · ocupación por grado vs. capacidad máxima</div>
+<div style="position:relative;width:100%;height:320px;"><canvas id="ocupChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;margin-bottom:1.5rem;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Estudiantes actuales 2026</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C0DD97;"></span>Cupos disponibles</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;border:1px dashed #E24B4A;"></span>Meta 32 est/curso</span>
+</div>
+
+<div class="div"></div>
+<div class="sec">Acciones específicas por segmento</div>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.5rem;">
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Ciclo Infantil · K3, K4, K5 — captación base</p>
+  <div class="accion-box ac-r">
+    <div class="at">K3 (6 est.) y K4 (8 est.) — llenado urgente</div>
+    <div class="as">Capacidad para 32 en K3 y 32 en K4. Hay 50 cupos vacíos en estos dos grados solos. Activar pipeline de Little Genius: todas las familias de K3 deben ser contactadas para matrícula 2027 antes de junio. Meta: llevar K4 a 20 estudiantes este año.</div>
+  </div>
+  <div class="accion-box ac-a">
+    <div class="at">K5 (20 est.) — transición desde K4</div>
+    <div class="as">El paso K4 → K5 debe ser automático. Crear evento de transición con familias en octubre para asegurar continuidad y captar externos. Objetivo: 28 estudiantes en K5 para 2027.</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Primaria baja · 1°, 2°, 3° — mayor volumen de captación</p>
+  <div class="accion-box ac-r">
+    <div class="at">1° (48 est.) — principal puerta de entrada</div>
+    <div class="as">Históricamente el grado con más nuevos (17 en 2025). Con 2 cursos y 16 cupos disponibles, es el grado donde más se puede crecer sin abrir curso. Meta: 60–64 estudiantes (llenar los 2 cursos). Foco de pauta digital y Play Day.</div>
+  </div>
+  <div class="accion-box ac-r">
+    <div class="at">2° (41 est., prom. 20/curso) — grado débil</div>
+    <div class="as">Promedio más bajo de toda la primaria. 23 cupos libres. Revisar causas de no captación: ¿hay competidores que capturan este grupo? Meta: 56 estudiantes. Campaña específica "ven a 2° con nosotros".</div>
+  </div>
+  <div class="accion-box ac-a">
+    <div class="at">3° (47 est.) — grado de mayor retiro histórico</div>
+    <div class="as">17 retiros en 2024, el más alto de todos los grados. La inconformidad con el modelo es la causa #1. Intervención directa: encuesta a familias de 3° en marzo, reunión de padres por curso antes de junio (mes pico de retiros).</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Primaria alta · 4°, 5° — consolidación</p>
+  <div class="accion-box ac-a">
+    <div class="at">4° (76 est., 3 cursos) — 20 cupos libres</div>
+    <div class="as">15 retiros en 2024 (2do grado más crítico). Solo 3 nuevos captados en 2025. Hay espacio para crecer. Priorizar retención: identificar familias en riesgo antes de mayo. Meta captación: 8 nuevos.</div>
+  </div>
+  <div class="accion-box ac-v">
+    <div class="at">5° (95 est., 4 cursos) — el más numeroso de primaria</div>
+    <div class="as">23–25 por curso, bien distribuido. 6 nuevos en 2025. 33 cupos libres. Es el grado que más se acerca a capacidad máxima de primaria. Mantener retención y captar 10 nuevos adicionales.</div>
+  </div>
+</div>
+
+<div>
+  <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Bachillerato · 6° a 11° — retención y captación selectiva</p>
+  <div class="accion-box ac-v">
+    <div class="at">6°, 7°, 8° — zona estable con cupos disponibles</div>
+    <div class="as">7° (110 est.) y 8° (102 est.) son los grados más poblados. 6° tiene 27 cupos libres. La convivencia es el factor de riesgo señalado en los informes académicos para 6° y 7°. Mantener programa de convivencia activo y visible para familias.</div>
+  </div>
+  <div class="accion-box ac-r">
+    <div class="at">9° (86 est.) y 10° (60 est.) — caída pronunciada</div>
+    <div class="as">De 102 en 8° a 86 en 9° y 60 en 10°: se pierden ~42 estudiantes en esta transición. El bilingüismo y el nivel académico son factores de retiro señalados. Propuesta: programa de refuerzo en inglés y matemáticas visible en grados 8° y 9° para retener la transición.</div>
+  </div>
+  <div class="accion-box ac-b">
+    <div class="at">11° (60 est.) — pipeline de recomendados</div>
+    <div class="as">Los graduados son embajadores. Activar programa "recomienda a tu familia" en el último trimestre: cada estudiante de 11° que refiera a una familia que se matricule en cualquier grado genera un beneficio (beca parcial, descuento). Potencial: 15–20 referidos de alta calidad.</div>
+  </div>
+</div>
+
+</div>
+
+<div class="div"></div>
+<div class="sec">Distribución de la meta de 200 nuevos por ciclo</div>
+<div style="position:relative;width:100%;height:220px;"><canvas id="metaChart"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:12px;color:var(--color-text-secondary);">
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#378ADD;"></span>Meta nuevos 2026 por ciclo</span>
+  <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#97C459;"></span>Histórico nuevos 2025</span>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const grados = [
+  { grado:'K3', cursos:1, est:6,   maxCurso:32, retHist:1,  nuevosHist:6,  estado:'critico',     estadoLabel:'Crítico',     accion:'Activar familias Little Genius · llenar curso urgente', color:'#E24B4A' },
+  { grado:'K4', cursos:1, est:8,   maxCurso:32, retHist:4,  nuevosHist:8,  estado:'critico',     estadoLabel:'Crítico',     accion:'Pipeline jardín → colegio · meta 20 est.', color:'#E24B4A' },
+  { grado:'K5', cursos:1, est:20,  maxCurso:32, retHist:1,  nuevosHist:20, estado:'oportunidad', estadoLabel:'Oportunidad', accion:'Transición K4→K5 automática · evento oct.', color:'#EF9F27' },
+  { grado:'1°', cursos:2, est:48,  maxCurso:32, retHist:3,  nuevosHist:17, estado:'oportunidad', estadoLabel:'Oportunidad', accion:'Puerta principal · foco Play Day y pauta', color:'#EF9F27' },
+  { grado:'2°', cursos:2, est:41,  maxCurso:32, retHist:2,  nuevosHist:0,  estado:'critico',     estadoLabel:'Crítico',     accion:'Campaña específica · revisar competencia local', color:'#E24B4A' },
+  { grado:'3°', cursos:2, est:47,  maxCurso:32, retHist:17, nuevosHist:0,  estado:'retencion',   estadoLabel:'Retención',   accion:'Encuesta familias marzo · reunión antes de junio', color:'#7F77DD' },
+  { grado:'4°', cursos:3, est:76,  maxCurso:32, retHist:15, nuevosHist:3,  estado:'retencion',   estadoLabel:'Retención',   accion:'Identificar familias en riesgo antes de mayo', color:'#7F77DD' },
+  { grado:'5°', cursos:4, est:95,  maxCurso:32, retHist:5,  nuevosHist:6,  estado:'estable',     estadoLabel:'Estable',     accion:'Mantener retención · captar 10 nuevos', color:'#639922' },
+  { grado:'6°', cursos:3, est:81,  maxCurso:32, retHist:3,  nuevosHist:0,  estado:'estable',     estadoLabel:'Estable',     accion:'Programa convivencia visible · 27 cupos libres', color:'#639922' },
+  { grado:'7°', cursos:4, est:110, maxCurso:32, retHist:3,  nuevosHist:4,  estado:'estable',     estadoLabel:'Estable',     accion:'Grado más poblado · sostener nivel', color:'#639922' },
+  { grado:'8°', cursos:4, est:102, maxCurso:32, retHist:12, nuevosHist:4,  estado:'retencion',   estadoLabel:'Retención',   accion:'Refuerzo inglés/mat antes de transición a 9°', color:'#7F77DD' },
+  { grado:'9°', cursos:3, est:86,  maxCurso:32, retHist:5,  nuevosHist:1,  estado:'retencion',   estadoLabel:'Retención',   accion:'Caída 8°→9°: contener deserción pre-bachillerato', color:'#7F77DD' },
+  { grado:'10°',cursos:3, est:60,  maxCurso:32, retHist:3,  nuevosHist:0,  estado:'retencion',   estadoLabel:'Retención',   accion:'Caída 9°→10°: comunicar propuesta de valor del ciclo', color:'#7F77DD' },
+  { grado:'11°',cursos:3, est:60,  maxCurso:32, retHist:2,  nuevosHist:1,  estado:'estable',     estadoLabel:'Estable',     accion:'Programa recomendados · 15-20 referidos', color:'#639922' },
+];
+
+function estadoPill(e,l){
+  const cls={critico:'p-roj',oportunidad:'p-amb',retencion:'p-mor',estable:'p-vrd'};
+  return `<span class="pill ${cls[e]}">${l}</span>`;
+}
+
+function buildTable(filter){
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  const data=filter==='todos'?grados:grados.filter(g=>g.estado===filter);
+  data.forEach(g=>{
+    const cap=g.cursos*g.maxCurso;
+    const libre=cap-g.est;
+    const pctOc=Math.round(g.est/cap*100);
+    const prom=Math.round(g.est/g.cursos);
+    const barCol=pctOc>=90?'#639922':pctOc>=70?'#EF9F27':'#E24B4A';
+    tb.innerHTML+=`<tr>
+      <td><b>${g.grado}</b></td>
+      <td class="c">${g.cursos}</td>
+      <td class="c">${g.est}</td>
+      <td class="c">${prom}</td>
+      <td class="c" style="color:${libre>20?'#639922':libre>5?'#BA7517':'#A32D2D'};font-weight:500;">${libre}</td>
+      <td class="c">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="bar-wrap"><div class="bar-inner" style="width:${pctOc}%;background:${barCol};"></div></div>
+          <span style="font-size:11px;color:var(--color-text-secondary);min-width:32px;">${pctOc}%</span>
+        </div>
+      </td>
+      <td class="c" style="color:${g.retHist>10?'#A32D2D':g.retHist>4?'#854F0B':'#3B6D11'};font-weight:500;">${g.retHist}</td>
+      <td class="c" style="color:${g.nuevosHist>=5?'#3B6D11':g.nuevosHist>=1?'#854F0B':'#A32D2D'};font-weight:500;">${g.nuevosHist}</td>
+      <td>${estadoPill(g.estado,g.estadoLabel)}</td>
+      <td style="font-size:11px;color:var(--color-text-secondary);">${g.accion}</td>
+    </tr>`;
+  });
+}
+
+function filtrar(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildTable(f);
+}
+
+buildTable('todos');
+
+const labels=grados.map(g=>g.grado);
+const actuals=grados.map(g=>g.est);
+const caps=grados.map(g=>g.cursos*32-g.est);
+
+new Chart(document.getElementById('ocupChart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      {label:'Actuales',data:actuals,backgroundColor:'#378ADD',borderRadius:3,stack:'a'},
+      {label:'Cupos libres',data:caps,backgroundColor:'#C0DD97',borderRadius:3,stack:'a'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{
+      label:ctx=>ctx.dataset.label+': '+ctx.raw+' est.'
+    }}},
+    scales:{
+      x:{stacked:true,grid:{display:false},ticks:{color:'#888',font:{size:11},autoSkip:false,maxRotation:0}},
+      y:{stacked:true,grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}},max:160}
+    }
+  }
+});
+
+const ciclos=['Infantil\n(K3–K5)','Primaria baja\n(1°–3°)','Primaria alta\n(4°–5°)','Bachillerato bajo\n(6°–8°)','Bachillerato alto\n(9°–11°)'];
+const metaNuevos=[20,55,40,40,45];
+const histNuevos=[6,17,9,8,2];
+
+new Chart(document.getElementById('metaChart'),{
+  type:'bar',
+  data:{
+    labels:['Infantil\n(K3–K5)','Primaria\nbaja (1°–3°)','Primaria\nalta (4°–5°)','Bachillerato\nbajo (6°–8°)','Bachillerato\nalto (9°–11°)'],
+    datasets:[
+      {label:'Meta nuevos 2026',data:metaNuevos,backgroundColor:'#378ADD',borderRadius:4},
+      {label:'Histórico 2025',data:histNuevos,backgroundColor:'#97C459',borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+    scales:{
+      x:{grid:{display:false},ticks:{color:'#888',font:{size:11},autoSkip:false,maxRotation:0}},
+      y:{grid:{color:'rgba(128,128,128,0.12)'},ticks:{color:'#888',font:{size:11}},max:70}
+    }
+  }
+});
+</script>

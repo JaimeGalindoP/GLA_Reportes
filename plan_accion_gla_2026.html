@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Acción · GLA 2026 · Meta 900 Estudiantes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --az: #1F4E79; --az-m: #2E75B6; --az-l: #DEEAF1;
+    --ve: #375623; --ve-l: #E2EFDA;
+    --ro: #9C0006; --ro-l: #FFC7CE;
+    --am: #7D4200; --am-l: #FFEB9C;
+    --mo: #3C3489; --mo-l: #EEEDFE;
+    --na: #833C00; --na-l: #FCE4D6;
+    --ci: #006064; --ci-l: #E0F7FA;
+    --gr: #F2F2F2; --brd: #D9D9D9;
+    --txt: #1a1a1a; --txt2: #555; --txt3: #888;
+    --bg: #f8f9fa; --white: #fff;
+    --radius: 8px; --radius-lg: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--txt); font-size: 13px; }
+
+  /* HEADER */
+  .header { background: var(--az); color: #fff; padding: 20px 28px 16px; }
+  .header h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .header p { font-size: 12px; opacity: .75; }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+  .header-meta span { font-size: 11px; background: rgba(255,255,255,.15); padding: 3px 10px; border-radius: 20px; }
+
+  /* LAYOUT */
+  .container { max-width: 1280px; margin: 0 auto; padding: 20px 20px; }
+
+  /* SUMMARY CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--brd); padding: 14px 16px; box-shadow: var(--shadow); }
+  .card-label { font-size: 11px; color: var(--txt3); margin-bottom: 4px; }
+  .card-value { font-size: 26px; font-weight: 600; line-height: 1; }
+  .card-sub { font-size: 10px; color: var(--txt3); margin-top: 3px; }
+
+  /* CHARTS ROW */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .chart-box { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--brd); padding: 16px; box-shadow: var(--shadow); }
+  .chart-title { font-size: 12px; font-weight: 600; color: var(--txt2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .chart-wrap { position: relative; }
+
+  /* FILTERS */
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; background: var(--white); border: 1px solid var(--brd); border-radius: var(--radius); padding: 12px 16px; box-shadow: var(--shadow); }
+  .toolbar-label { font-size: 11px; color: var(--txt3); font-weight: 600; margin-right: 4px; }
+  .chip { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--brd); background: var(--white); color: var(--txt2); cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .chip:hover { background: var(--gr); }
+  .chip.active { background: var(--az); color: #fff; border-color: var(--az); }
+  .chip.chip-estado.active-pendiente { background: var(--am-l); color: var(--am); border-color: var(--am); }
+  .chip.chip-estado.active-en-curso { background: var(--az-l); color: var(--az-m); border-color: var(--az-m); }
+  .chip.chip-estado.active-bloqueado { background: var(--ro-l); color: var(--ro); border-color: var(--ro); }
+  .chip.chip-estado.active-completado { background: var(--ve-l); color: var(--ve); border-color: var(--ve); }
+  .search-wrap { margin-left: auto; }
+  .search-wrap input { border: 1px solid var(--brd); border-radius: var(--radius); padding: 5px 12px; font-size: 12px; width: 200px; color: var(--txt); background: var(--white); }
+  .search-wrap input:focus { outline: none; border-color: var(--az-m); }
+
+  /* RESULTS BAR */
+  .results-bar { font-size: 11px; color: var(--txt3); margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+  .results-bar strong { color: var(--txt); }
+
+  /* KANBAN */
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kanban-col { background: var(--gr); border-radius: var(--radius-lg); padding: 12px; }
+  .kanban-head { font-size: 11px; font-weight: 600; color: var(--txt2); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+  .kanban-count { background: var(--white); color: var(--txt); font-size: 10px; padding: 1px 7px; border-radius: 10px; border: 1px solid var(--brd); }
+  .kanban-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--brd); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; transition: box-shadow .15s; box-shadow: var(--shadow); }
+  .kanban-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+  .kanban-card-num { font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+  .kanban-card-title { font-size: 12px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; color: var(--txt); }
+  .kanban-card-footer { display: flex; align-items: center; justify-content: space-between; }
+
+  /* TABLE VIEW */
+  .table-wrap { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--brd); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead tr { background: var(--az); }
+  thead th { color: #fff; font-weight: 500; padding: 10px 10px; text-align: left; font-size: 11px; white-space: nowrap; }
+  thead th.sortable { cursor: pointer; user-select: none; }
+  thead th.sortable:hover { background: var(--az-m); }
+  tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .1s; }
+  tbody tr:hover { background: #f7f9ff; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 9px 10px; vertical-align: middle; }
+  tbody td.desc { max-width: 300px; }
+  .desc-text { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--txt2); font-size: 11px; line-height: 1.4; }
+  .desc-text.expanded { -webkit-line-clamp: unset; }
+
+  /* PILLS / BADGES */
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .badge-alta     { background: var(--ro-l); color: var(--ro); }
+  .badge-media    { background: var(--am-l); color: var(--am); }
+  .badge-base     { background: var(--ve-l); color: var(--ve); }
+  .badge-pendiente  { background: var(--am-l); color: var(--am); }
+  .badge-en-curso   { background: var(--az-l); color: var(--az-m); }
+  .badge-bloqueado  { background: var(--ro-l); color: var(--ro); }
+  .badge-completado { background: var(--ve-l); color: var(--ve); }
+  .palanca-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+
+  /* MESES dots */
+  .mes-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin: 1px; }
+  .mes-on  { background: var(--az-m); }
+  .mes-off { background: #e0e0e0; }
+
+  /* VIEW TOGGLE */
+  .view-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+  .view-btn { padding: 6px 14px; border-radius: var(--radius); border: 1px solid var(--brd); background: var(--white); color: var(--txt2); cursor: pointer; font-size: 12px; transition: all .15s; }
+  .view-btn.active { background: var(--az); color: #fff; border-color: var(--az); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: var(--radius-lg); max-width: 600px; width: 95%; max-height: 85vh; overflow-y: auto; padding: 24px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,.2); }
+  .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--txt3); line-height: 1; }
+  .modal-num { font-size: 11px; font-weight: 700; color: var(--txt3); margin-bottom: 4px; }
+  .modal-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .modal-field { background: var(--gr); border-radius: var(--radius); padding: 8px 10px; }
+  .modal-field-label { font-size: 10px; color: var(--txt3); margin-bottom: 2px; }
+  .modal-field-val { font-size: 12px; font-weight: 500; }
+  .modal-desc { background: #f0f4f8; border-radius: var(--radius); padding: 12px; font-size: 12px; line-height: 1.6; color: var(--txt2); margin-bottom: 14px; }
+  .modal-meses { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mes-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  .mes-activo { background: var(--az-l); color: var(--az-m); border: 1px solid #B5D4F4; }
+  .mes-inactivo { background: var(--gr); color: var(--txt3); border: 1px solid #e0e0e0; }
+
+  /* GANTT */
+  .gantt-wrap { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--brd); overflow-x: auto; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .gantt-table { min-width: 700px; border-collapse: collapse; font-size: 11px; }
+  .gantt-table th { padding: 8px 10px; background: var(--az); color: #fff; text-align: center; font-weight: 500; }
+  .gantt-table th.left { text-align: left; }
+  .gantt-table td { padding: 6px 10px; border-bottom: 1px solid #f0f0f0; }
+  .gantt-bar { background: var(--az-m); border-radius: 3px; height: 12px; display: flex; align-items: center; justify-content: center; }
+
+  /* PROGRESS */
+  .progress-section { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--brd); padding: 16px 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .progress-title { font-size: 12px; font-weight: 600; color: var(--txt2); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .04em; }
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .progress-label { font-size: 11px; color: var(--txt2); min-width: 160px; }
+  .progress-bar-bg { flex: 1; background: var(--gr); border-radius: 4px; height: 8px; }
+  .progress-bar-fill { height: 8px; border-radius: 4px; }
+  .progress-val { font-size: 11px; font-weight: 600; min-width: 30px; text-align: right; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 11px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; margin-top: 4px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .charts-row { grid-template-columns: 1fr 1fr; }
+    .kanban { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .charts-row { grid-template-columns: 1fr; }
+    .kanban { grid-template-columns: 1fr; }
+    .modal-grid { grid-template-columns: 1fr; }
+    .search-wrap input { width: 140px; }
+  }
+
+  /* ESTADO COLUMN COLORS */
+  .col-en-curso  { border-left: 3px solid var(--az-m); }
+  .col-bloqueado { border-left: 3px solid var(--ro); }
+  .col-completado{ border-left: 3px solid var(--ve); }
+
+  /* UPDATE STATUS BUTTON */
+  .status-select { font-size: 11px; border: 1px solid var(--brd); border-radius: 4px; padding: 2px 6px; cursor: pointer; background: var(--white); color: var(--txt); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Plan de Acción · Gimnasio Los Andes 2026</h1>
+  <p>Meta: 200 nuevos inscritos · 900 estudiantes · Abril–Diciembre 2026</p>
+  <div class="header-meta">
+    <span>38 acciones</span>
+    <span>7 palancas</span>
+    <span>Jt=Jaime · Mx=Milton · Ax=Alejandra · Rc=Rectoría · Ag=Agencia · Sg=Sergio</span>
+    <span id="last-updated">Actualizado: hoy</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards" id="summaryCards"></div>
+
+  <!-- CHARTS ROW -->
+  <div class="charts-row">
+    <div class="chart-box">
+      <div class="chart-title">Estado de acciones</div>
+      <div class="chart-wrap" style="height:160px;"><canvas id="estadoChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Meta de nuevos por palanca</div>
+      <div class="chart-wrap" style="height:160px;"><canvas id="palancaChart"></canvas></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Acciones activas por mes</div>
+      <div class="chart-wrap" style="height:160px;"><canvas id="mesChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- PROGRESO POR PALANCA -->
+  <div class="progress-section">
+    <div class="progress-title">Progreso por palanca</div>
+    <div id="progressBars"></div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <span class="toolbar-label">Palanca</span>
+    <div id="palancaFilters"></div>
+    <span class="toolbar-label" style="margin-left:8px;">Estado</span>
+    <div id="estadoFilters"></div>
+    <span class="toolbar-label" style="margin-left:8px;">Prioridad</span>
+    <div id="prioFilters"></div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Buscar acción...">
+    </div>
+  </div>
+
+  <!-- VIEW TOGGLE -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div class="results-bar" id="resultsBar"><strong>38</strong> acciones mostradas</div>
+    <div class="view-toggle">
+      <button class="view-btn active" onclick="setView('tabla',this)">Tabla</button>
+      <button class="view-btn" onclick="setView('kanban',this)">Kanban</button>
+      <button class="view-btn" onclick="setView('gantt',this)">Calendario</button>
+    </div>
+  </div>
+
+  <!-- TABLE VIEW -->
+  <div id="viewTabla" class="table-wrap">
+    <table id="mainTable">
+      <thead><tr>
+        <th class="sortable" onclick="sortBy('num')">#</th>
+        <th class="sortable" onclick="sortBy('prioridad')">Prior.</th>
+        <th class="sortable" onclick="sortBy('accion')">Acción</th>
+        <th>Descripción</th>
+        <th class="sortable" onclick="sortBy('palanca')">Palanca</th>
+        <th>Resp.</th>
+        <th>Inicio</th>
+        <th>Límite</th>
+        <th>Nuevos</th>
+        <th>Meses</th>
+        <th class="sortable" onclick="sortBy('estado')">Estado</th>
+      </tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- KANBAN VIEW -->
+  <div id="viewKanban" style="display:none;">
+    <div class="kanban" id="kanbanBoard"></div>
+  </div>
+
+  <!-- GANTT VIEW -->
+  <div id="viewGantt" style="display:none;">
+    <div class="gantt-wrap">
+      <table class="gantt-table" id="ganttTable">
+        <thead><tr>
+          <th class="left" style="min-width:60px;">#</th>
+          <th class="left" style="min-width:200px;">Acción</th>
+          <th class="left" style="min-width:120px;">Palanca</th>
+          <th style="width:70px;">Abr</th>
+          <th style="width:70px;">May</th>
+          <th style="width:70px;">Jun</th>
+          <th style="width:70px;">Jul</th>
+          <th style="width:80px;">Ago–Dic</th>
+          <th style="width:90px;">Estado</th>
+        </tr></thead>
+        <tbody id="ganttBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+    <div class="modal-num" id="m-num"></div>
+    <div class="modal-title" id="m-title"></div>
+    <div class="modal-grid" id="m-grid"></div>
+    <div class="modal-desc" id="m-desc"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--txt3);margin-bottom:8px;">MESES ACTIVOS</div>
+    <div class="modal-meses" id="m-meses"></div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:11px;color:var(--txt3);">Actualizar estado:</span>
+      <select class="status-select" id="m-status-select" onchange="updateStatus()">
+        <option value="Pendiente">Pendiente</option>
+        <option value="En curso">En curso</option>
+        <option value="Completado">Completado</option>
+        <option value="Bloqueado">Bloqueado</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<script>
+const PALANCA_COLORS = {
+  'Pauta Digital':       {dot:'#2E75B6', bg:'#DEEAF1', txt:'#1F4E79'},
+  'Email & CRM':         {dot:'#639922', bg:'#E2EFDA', txt:'#375623'},
+  'Contenido & RRSS':    {dot:'#7F77DD', bg:'#EEEDFE', txt:'#3C3489'},
+  'Eventos':             {dot:'#EF9F27', bg:'#FFEB9C', txt:'#7D4200'},
+  'Admisiones & Cierre': {dot:'#D85A30', bg:'#FCE4D6', txt:'#833C00'},
+  'Pipeline':            {dot:'#1D9E75', bg:'#E1F5EE', txt:'#006064'},
+  'Retención':           {dot:'#E24B4A', bg:'#FFC7CE', txt:'#9C0006'},
+};
+
+const ESTADO_COLORS = {
+  'Pendiente':  {bg:'#FFEB9C', txt:'#7D4200'},
+  'En curso':   {bg:'#DEEAF1', txt:'#2E75B6'},
+  'Bloqueado':  {bg:'#FFC7CE', txt:'#9C0006'},
+  'Completado': {bg:'#E2EFDA', txt:'#375623'},
+};
+
+// DATA
+const RAW = [{"num":"PAU-01","prioridad":"Alta","accion":"Formularios nativos Meta (Lead Gen Forms)","descripcion":"Migrar campañas a formularios nativos de Instagram/Meta. Eliminar fricción de landing externa. Incluir campo de rango de mensualidad ($800K-$1.2M / $1.2M-$1.8M / +$1.8M) para filtrar leads no calificados desde el formulario. CPL objetivo: $8,000–$10,000.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"Abr 2026","fecha_limite":"May 2026","meta_nuevos":"30","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"En curso"},{"num":"PAU-02","prioridad":"Alta","accion":"Escalar conjunto 'Intereses' ($8,967 CPL)","descripcion":"Conjunto con CPL más bajo de 2025. Duplicar presupuesto asignado, replicar segmentación en segundo conjunto paralelo. No pausar hasta que CPL supere $15K sostenido por 2 semanas consecutivas.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Jun 2026","meta_nuevos":"20","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"En curso"},{"num":"PAU-03","prioridad":"Alta","accion":"Regla fija: pausar anuncios con CPL > $20K / 2 semanas","descripcion":"Cualquier anuncio que supere $20,000 COP de CPL durante 2 semanas consecutivas se pausa automáticamente. La agencia propone reemplazo esa misma semana. Se revisa en reunión viernes de seguimiento.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"En curso"},{"num":"PAU-04","prioridad":"Alta","accion":"Nuevos creativos video por ciclo y grado específico","descripcion":"Sergio produce videos por ciclo: K3-K4 (Little Genius), K5-1° (transición), 6°-8° (bilingüismo+STEM). Jt reedita: subtítulos, voz en off, cortes dinámicos, stories previas. Meta: 1 nuevo creativo/semana.","palanca":"Pauta Digital","responsable":"Sg / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Jun 2026","meta_nuevos":"25","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"En curso"},{"num":"PAU-05","prioridad":"Alta","accion":"Campaña específica grado 2° – el más débil del colegio","descripcion":"Solo 41 estudiantes (prom 20/curso), 23 cupos libres, cero nuevos captados en 2025. Campaña diferenciada: '¿Tu hijo está en 1°? El siguiente paso natural es GLA.' Testimoniales de familias de 2°.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"May 2026","fecha_limite":"Sep 2026","meta_nuevos":"15","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PAU-06","prioridad":"Alta","accion":"Alianzas corporativas – leads calificados de empresas","descripcion":"Contactar RRHH de 5 empresas ancla del sector (Colsanitas, Bavaria, Telefónica + 2 más). Ofrecer beneficio corporativo: descuento 5-8% en matrícula para colaboradores.","palanca":"Pauta Digital","responsable":"Mx / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Jun 2026","meta_nuevos":"20","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PAU-07","prioridad":"Media","accion":"Verificar e instalar pixel Meta correctamente","descripcion":"Solo 5 visitas de página registradas de 1,753 clics. El pixel no está disparando. Agencia verifica instalación en máx. 1 semana. Sin pixel funcional no hay datos de remarketing reales.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"Agencia técnica","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PAU-08","prioridad":"Media","accion":"AB testing de copies, segmentaciones y formatos","descripcion":"Probar 3 variaciones de copy por anuncio (emocional / racional / diferenciador). Probar 2 segmentaciones: intereses educación vs. comportamiento padres con hijos 3-15 años.","palanca":"Pauta Digital","responsable":"Ag / Jt","fecha_inicio":"May 2026","fecha_limite":"Jul 2026","meta_nuevos":"15","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":false},"estado":"Pendiente"},{"num":"CRM-01","prioridad":"Alta","accion":"Activar dominio correo GLA en Clientify [DESBLOQUEADOR]","descripcion":"BLOQUEADOR CRÍTICO de 6 acciones. Sin dominio activado no hay email marketing. Gestionar con TI del colegio esta semana. Prerrequisito de CRM-02 a CRM-06, RET-03 y ADM-04.","palanca":"Email & CRM","responsable":"Mx / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"TI / dominio correo","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-02","prioridad":"Alta","accion":"Reactivar 10,000 leads fríos en Clientify","descripcion":"Segmentar base por año de ingreso y grado de interés. Secuencia de 4 correos: (1) reconexión, (2) diferenciador video Little Genius/STEM, (3) invitación webinar, (4) oferta Play Day. Si el 3% responde = 300 leads calientes.","palanca":"Email & CRM","responsable":"Jt / Ax","fecha_inicio":"Abr 2026","fecha_limite":"May 2026","meta_nuevos":"30","bloqueado_por":"CRM-01","meses":{"Abr":true,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-03","prioridad":"Alta","accion":"Automatización inmediata: respuesta en < 5 min al lead nuevo","descripcion":"Configurar en Clientify: lead nuevo → email automático de bienvenida en < 5 min + alerta a Alejandra al celular. Si en 2h no hay contacto humano → alerta escalonada a Practicante SENA.","palanca":"Email & CRM","responsable":"Jt / Ax","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"CRM-01","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-04","prioridad":"Media","accion":"Funnels automatizados por ciclo educativo (3 funnels)","descripcion":"Crear 3 funnels separados: (1) Infantil K3-K5, (2) Primaria 1°-5°, (3) Bachillerato 6°-11°. Cada funnel con emails específicos del ciclo, invitación a Play Day o webinar y seguimiento a los 3, 7 y 15 días.","palanca":"Email & CRM","responsable":"Jt / Ax","fecha_inicio":"May 2026","fecha_limite":"Jun 2026","meta_nuevos":"20","bloqueado_por":"CRM-01","meses":{"Abr":false,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-05","prioridad":"Media","accion":"Landings propias en Clientify para todos los eventos","descripcion":"Eliminar Google Forms. Landing en Clientify para: Play Day, Charla Virtual, Webinar externo, Webinar padres. Registro cae directo al CRM con etiqueta automática.","palanca":"Email & CRM","responsable":"Jt / Ax","fecha_inicio":"May 2026","fecha_limite":"May 2026","meta_nuevos":"-","bloqueado_por":"CRM-01","meses":{"Abr":false,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-06","prioridad":"Media","accion":"Capacitar Alejandra y Practicante SENA en Clientify","descripcion":"Sesión de 3 horas con Jt: etiquetas, funnels, seguimiento de leads, reportes semanales. Practicante SENA asume gestión diaria del CRM bajo supervisión de Alejandra.","palanca":"Email & CRM","responsable":"Jt / Ax","fecha_inicio":"May 2026","fecha_limite":"May 2026","meta_nuevos":"-","bloqueado_por":"CRM-01","meses":{"Abr":false,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"CRM-07","prioridad":"Media","accion":"Encuesta de satisfacción semestral a 100% familias","descripcion":"Encuesta digital (máx 10 preguntas) en Clientify en abril y octubre a todas las familias activas. Resultados analizados por grado. Informe a Gerencia y Rectoría con plan de acción por hallazgo dentro de 2 semanas.","palanca":"Email & CRM","responsable":"Mx / Rc","fecha_inicio":"Abr 2026","fecha_limite":"Oct 2026","meta_nuevos":"-","bloqueado_por":"CRM-01","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":true},"estado":"Bloqueado"},{"num":"CON-01","prioridad":"Alta","accion":"Sistematizar flujo semanal de producción de contenido","descripcion":"Flujo fijo: lunes Sergio entrega clip → martes Jt reedita (subtítulos, cortes, voz en off) → miércoles 2 stories de activación → jueves sube reel. Sin excepción toda la semana.","palanca":"Contenido & RRSS","responsable":"Sg / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"En curso"},{"num":"CON-02","prioridad":"Alta","accion":"Subtítulos obligatorios en todos los reels","descripcion":"El 85% del contenido se ve sin audio. Ningún reel sube sin subtítulos. Sergio los agrega en edición propia. Jt valida antes de publicar. Implementar desde la próxima publicación.","palanca":"Contenido & RRSS","responsable":"Sg / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"En curso"},{"num":"CON-03","prioridad":"Media","accion":"Estrategia diferenciada: cuenta oficial vs. Comunidad Gimandina","descripcion":"Cuenta oficial GLA: pauta + contenido institucional de alta producción. Comunidad Gimandina: contenido orgánico, comunidad, eventos, día a día. NUNCA pautar desde Comunidad Gimandina.","palanca":"Contenido & RRSS","responsable":"Jt / Sg","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"CON-04","prioridad":"Media","accion":"Banco de contenido Escuela de Padres (Hotmart o similar)","descripcion":"Grabar y editar webinars de padres actuales. Subir a plataforma. Doble beneficio: fidelización familias actuales + posible venta a padres externos como entrada al embudo. 4 módulos en el año.","palanca":"Contenido & RRSS","responsable":"Sg / Jt","fecha_inicio":"Jun 2026","fecha_limite":"Dic 2026","meta_nuevos":"10","bloqueado_por":"—","meses":{"Abr":false,"May":false,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"EVE-01","prioridad":"Alta","accion":"Play Days mensuales con landing propia + seguimiento CRM","descripcion":"Mín. 1 Play Day/mes (2 en meses clave: mayo y julio). Inscripción exclusiva por landing Clientify. Meta por evento: 60 asistentes externos. Follow-up CRM < 48h. Agenda estándar: tour Little Genius + STEM Lab + Fintech Hub + testimonio padre actual.","palanca":"Eventos","responsable":"Ax / Jt","fecha_inicio":"May 2026","fecha_limite":"Dic 2026","meta_nuevos":"40","bloqueado_por":"CRM-05","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"EVE-02","prioridad":"Alta","accion":"Webinars mensuales exclusivos para nuevas familias","descripcion":"1 webinar/mes SOLO para prospectos. NUNCA mezclar con familias actuales. Segmentar invitación por etiqueta 'prospecto' en Clientify. Pauta $250K/webinar. Meta: 60 registrados, 10 agendamientos.","palanca":"Eventos","responsable":"Ax / Jt / Ag","fecha_inicio":"May 2026","fecha_limite":"Dic 2026","meta_nuevos":"30","bloqueado_por":"CRM-05","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"EVE-03","prioridad":"Media","accion":"Webinars Escuela de Padres para familias actuales (bimestral)","descripcion":"1 webinar bimestral exclusivo para familias actuales (etiqueta 'familia activa'). Temas: crianza consciente, manejo de emociones, acompañamiento académico. Refuerza sentido de pertenencia.","palanca":"Eventos","responsable":"Rc / Ax","fecha_inicio":"Jun 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"CRM-05","meses":{"Abr":false,"May":false,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"EVE-04","prioridad":"Media","accion":"Noche de Familias GLA – evento presencial de cierre","descripcion":"Evento en agosto y noviembre para familias en proceso de admisión avanzado. Presentación rector, testimonio 2 padres actuales, recorrido instalaciones. Cierre de procesos en el evento mismo. Meta: 30 cierres por evento.","palanca":"Eventos","responsable":"Ax / Rc","fecha_inicio":"Ago 2026","fecha_limite":"Nov 2026","meta_nuevos":"25","bloqueado_por":"—","meses":{"Abr":false,"May":false,"Jun":false,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"ADM-01","prioridad":"Alta","accion":"Grabar 100% de cierres y llamadas de admisiones","descripcion":"Implementar grabación de todas las llamadas y visitas (con consentimiento). Revisión semanal: Jt y Alejandra escuchan 3 grabaciones juntos e identifican mejoras. En 60 días: banco de los 10 mejores cierres.","palanca":"Admisiones & Cierre","responsable":"Ax / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"ADM-02","prioridad":"Alta","accion":"Protocolo estándar visita al colegio (45 min)","descripcion":"Tour fijo: 10 min Little Genius → 10 min STEM Lab + Fintech Hub → 10 min reunión con coordinador de ciclo → 15 min propuesta personalizada escrita en el momento. Follow-up en < 24h.","palanca":"Admisiones & Cierre","responsable":"Ax / Rc","fecha_inicio":"Abr 2026","fecha_limite":"May 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"ADM-03","prioridad":"Alta","accion":"Closers externos por comisión (piloto 2 closers)","descripcion":"Vincular 2 closers por comisión ($150,000-$200,000 COP por matrícula efectiva). Prerrequisito: ver banco de grabaciones de Alejandra. Asignarles leads de base de 10,000 fríos. Evaluar a 60 días.","palanca":"Admisiones & Cierre","responsable":"Jt / Mx","fecha_inicio":"May 2026","fecha_limite":"Dic 2026","meta_nuevos":"40","bloqueado_por":"ADM-01 (grabaciones)","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"ADM-04","prioridad":"Alta","accion":"Respuesta a lead < 2 horas (regla de oro)","descripcion":"Ningún lead espera más de 2 horas. Alerta automática Clientify al celular de Alejandra + Practicante al recibir lead. Si pasan 2h sin contacto: alerta a Jt. Medir tiempo promedio de respuesta en cada reunión viernes.","palanca":"Admisiones & Cierre","responsable":"Ax / Jt","fecha_inicio":"Abr 2026","fecha_limite":"Abr 2026","meta_nuevos":"-","bloqueado_por":"CRM-03","meses":{"Abr":true,"May":false,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Bloqueado"},{"num":"ADM-05","prioridad":"Media","accion":"Mapeo de objeciones frecuentes y guión de respuesta","descripcion":"Analizar 66 procesos perdidos en 2025. Categorizar objeción: precio, distancia, bilingüismo, académico. Crear guión de respuesta por objeción tipo. Alejandra y closers deben conocer y usar.","palanca":"Admisiones & Cierre","responsable":"Ax / Jt","fecha_inicio":"May 2026","fecha_limite":"May 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":false,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PIP-01","prioridad":"Alta","accion":"Pipeline K3-K4 → K5 → 1°: retención transición interna","descripcion":"Las familias de K3-K4 ya están dentro. Jornada 'conoce el colegio' en mayo para estas familias: presentar paso a K5 y 1° como natural y seguro. Coordinador de infantil hace llamada personal a cada familia de K4 antes de junio.","palanca":"Pipeline","responsable":"Rc / Ax","fecha_inicio":"May 2026","fecha_limite":"Jun 2026","meta_nuevos":"14","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PIP-02","prioridad":"Alta","accion":"Activación pipeline desde jardines y preescolares aliados","descripcion":"Identificar 5 jardines del área con los que haya relación. Ofrecer charla informativa para sus familias sobre la transición a primaria. Potencial: 20 nuevos estudiantes de ciclo infantil sin costo de pauta.","palanca":"Pipeline","responsable":"Jt / Rc","fecha_inicio":"May 2026","fecha_limite":"Jul 2026","meta_nuevos":"20","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":false},"estado":"Pendiente"},{"num":"PIP-03","prioridad":"Media","accion":"Programa 'Recomienda a tu familia' – graduados grado 11°","descripcion":"Los 60 estudiantes de 11° son embajadores con redes activas. Por cada familia que matriculen en cualquier grado, el estudiante recibe beneficio. Lanzar en octubre, cerrar en diciembre. Potencial: 15-20 referidos.","palanca":"Pipeline","responsable":"Rc / Ax","fecha_inicio":"Oct 2026","fecha_limite":"Dic 2026","meta_nuevos":"18","bloqueado_por":"—","meses":{"Abr":false,"May":false,"Jun":false,"Jul":false,"Ago-Dic":true},"estado":"Pendiente"},{"num":"PIP-04","prioridad":"Media","accion":"Activar 50 familias embajadoras – programa referidos","descripcion":"Identificar las 50 familias más comprometidas. Invitar al 'Programa GLA Amigos': descuento 5% en matrícula siguiente año por cada familia nueva que matriculen. Potencial: 20 referidos de alta calidad.","palanca":"Pipeline","responsable":"Ax / Mk","fecha_inicio":"May 2026","fecha_limite":"Dic 2026","meta_nuevos":"20","bloqueado_por":"CRM-07 (encuesta)","meses":{"Abr":false,"May":true,"Jun":false,"Jul":false,"Ago-Dic":true},"estado":"Pendiente"},{"num":"RET-01","prioridad":"Alta","accion":"Protocolo alerta temprana retiro – activar en octubre","descripcion":"Diciembre tuvo 29 retiros (pico máximo 2025), enero otros 19. Encuesta de satisfacción a 100% familias en octubre. Identificar familias en riesgo. Café en familia personalizado con los 20 casos más críticos antes del 30 noviembre.","palanca":"Retención","responsable":"Rc / Ax","fecha_inicio":"Oct 2026","fecha_limite":"Nov 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":false,"May":false,"Jun":false,"Jul":false,"Ago-Dic":true},"estado":"Pendiente"},{"num":"RET-02","prioridad":"Alta","accion":"Intervención directa grado 3° y 4° antes de junio","descripcion":"3° (17 retiros 2024) y 4° (15 retiros) son los grados más críticos históricamente. Encuesta anónima a familias en abril. Reunión de padres por curso en mayo. Coordinador hace seguimiento individual a 5 familias de mayor riesgo.","palanca":"Retención","responsable":"Rc / Ax","fecha_inicio":"Abr 2026","fecha_limite":"Jun 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"RET-03","prioridad":"Alta","accion":"Plan retención transición 8°→9°→10° (42 estudiantes perdidos)","descripcion":"De 102 en 8° se pasa a 86 en 9° y 60 en 10°: se pierden ~42 estudiantes. Programa de refuerzo visible en inglés y matemáticas desde feb para familias de 8°. Jornada informativa 'qué viene en bachillerato' en mayo.","palanca":"Retención","responsable":"Rc / Ax","fecha_inicio":"May 2026","fecha_limite":"Jun 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":false,"Ago-Dic":false},"estado":"Pendiente"},{"num":"RET-04","prioridad":"Media","accion":"Cafés en familia en grados críticos (K4, 1B, 3°, 4°)","descripcion":"K4, 1B, 3° y 4° son los grados de mayor sensibilidad. Café mensual rotativo con familias de estos grados: director de grupo + coordinador presentes. Agenda fija: logros del período, retos, compromisos.","palanca":"Retención","responsable":"Rc","fecha_inicio":"May 2026","fecha_limite":"Ago 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"},{"num":"RET-05","prioridad":"Media","accion":"Comunicación mensual segmentada a familias actuales","descripcion":"Usar Clientify (etiqueta 'familia activa') para comunicación mensual: logros del mes, eventos, noticias del colegio. 1 email mensual + 1 story semanal en Comunidad Gimandina.","palanca":"Retención","responsable":"Jt / Ax","fecha_inicio":"May 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"CRM-01","meses":{"Abr":false,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Bloqueado"},{"num":"RET-06","prioridad":"Media","accion":"Fortalecimiento convivencia 6°-7° (factor de retiro señalado)","descripcion":"Informes académicos identifican problemas de convivencia en 6° y 7° como factor de retiro. Taller de convivencia por curso (no solo charla general). Mediadores entre pares activos. Seguimiento mensual por coordinador.","palanca":"Retención","responsable":"Rc","fecha_inicio":"Abr 2026","fecha_limite":"Dic 2026","meta_nuevos":"-","bloqueado_por":"—","meses":{"Abr":true,"May":true,"Jun":true,"Jul":true,"Ago-Dic":true},"estado":"Pendiente"}];
+
+// LOAD STATE FROM LOCALSTORAGE
+const stateKey = 'gla_plan_2026_estado';
+let estados = JSON.parse(localStorage.getItem(stateKey) || '{}');
+let data = RAW.map(a => ({...a, estado: estados[a.num] || a.estado}));
+
+// FILTERS STATE
+let filters = { palanca: 'Todos', estado: 'Todos', prioridad: 'Todos', search: '' };
+let sortKey = null, sortAsc = true;
+let currentView = 'tabla';
+let modalIdx = null;
+
+function saveEstados() {
+  localStorage.setItem(stateKey, JSON.stringify(estados));
+  document.getElementById('last-updated').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-CO', {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+
+function updateStatus() {
+  if (modalIdx === null) return;
+  const sel = document.getElementById('m-status-select').value;
+  data[modalIdx].estado = sel;
+  estados[data[modalIdx].num] = sel;
+  saveEstados();
+  renderAll();
+}
+
+// COMPUTED
+function filtered() {
+  let d = [...data];
+  if (filters.palanca !== 'Todos') d = d.filter(a => a.palanca === filters.palanca);
+  if (filters.estado !== 'Todos') d = d.filter(a => a.estado === filters.estado);
+  if (filters.prioridad !== 'Todos') d = d.filter(a => a.prioridad === filters.prioridad);
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    d = d.filter(a => a.accion.toLowerCase().includes(q) || a.num.toLowerCase().includes(q) || a.responsable.toLowerCase().includes(q) || a.descripcion.toLowerCase().includes(q));
+  }
+  if (sortKey) d.sort((a,b) => {
+    const av = (a[sortKey]||'').toString(), bv = (b[sortKey]||'').toString();
+    return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  return d;
+}
+
+// BADGE HTML
+function badge(val, type) {
+  const key = (val||'').toLowerCase().replace(' ','-');
+  return `<span class="badge badge-${key}">${val}</span>`;
+}
+
+function palancaDot(pal) {
+  const c = PALANCA_COLORS[pal] || {dot:'#888'};
+  return `<span class="palanca-dot" style="background:${c.dot};"></span>${pal}`;
+}
+
+function mesDots(meses) {
+  const order = ['Abr','May','Jun','Jul','Ago-Dic'];
+  return order.map(m => `<span class="mes-dot ${meses[m]?'mes-on':'mes-off'}" title="${m}"></span>`).join('');
+}
+
+// RENDER SUMMARY CARDS
+function renderCards() {
+  const d = data;
+  const total = d.length;
+  const en_curso = d.filter(a=>a.estado==='En curso').length;
+  const bloqueado = d.filter(a=>a.estado==='Bloqueado').length;
+  const completado = d.filter(a=>a.estado==='Completado').length;
+  const pendiente = d.filter(a=>a.estado==='Pendiente').length;
+  const metaTotal = d.reduce((s,a)=> s + (isNaN(parseInt(a.meta_nuevos))?0:parseInt(a.meta_nuevos)),0);
+  const alta = d.filter(a=>a.prioridad==='Alta').length;
+
+  document.getElementById('summaryCards').innerHTML = `
+    <div class="card"><div class="card-label">Total acciones</div><div class="card-value" style="color:#1F4E79;">${total}</div><div class="card-sub">Plan completo 2026</div></div>
+    <div class="card"><div class="card-label">En curso</div><div class="card-value" style="color:#2E75B6;">${en_curso}</div><div class="card-sub">${Math.round(en_curso/total*100)}% del total</div></div>
+    <div class="card"><div class="card-label">Pendientes</div><div class="card-value" style="color:#7D4200;">${pendiente}</div><div class="card-sub">Por iniciar</div></div>
+    <div class="card"><div class="card-label">Bloqueadas</div><div class="card-value" style="color:#9C0006;">${bloqueado}</div><div class="card-sub">Esperan desbloqueador</div></div>
+    <div class="card"><div class="card-label">Completadas</div><div class="card-value" style="color:#375623;">${completado}</div><div class="card-sub">Listas ✓</div></div>
+    <div class="card"><div class="card-label">Meta nuevos</div><div class="card-value" style="color:#1F4E79;">${metaTotal}</div><div class="card-sub">Potencial total</div></div>
+    <div class="card"><div class="card-label">Prioridad alta</div><div class="card-value" style="color:#9C0006;">${alta}</div><div class="card-sub">Requieren atención</div></div>
+  `;
+}
+
+// RENDER CHARTS
+let estadoChartObj, palancaChartObj, mesChartObj;
+function renderCharts() {
+  const estadoCount = {};
+  ['Pendiente','En curso','Bloqueado','Completado'].forEach(e => estadoCount[e] = data.filter(a=>a.estado===e).length);
+
+  const palancaCount = {};
+  data.forEach(a => {
+    const m = isNaN(parseInt(a.meta_nuevos))?0:parseInt(a.meta_nuevos);
+    palancaCount[a.palanca] = (palancaCount[a.palanca]||0) + m;
+  });
+
+  const mesCounts = {Abr:0,May:0,Jun:0,Jul:0,'Ago-Dic':0};
+  data.forEach(a => Object.keys(mesCounts).forEach(m => { if(a.meses[m]) mesCounts[m]++; }));
+
+  if (estadoChartObj) estadoChartObj.destroy();
+  if (palancaChartObj) palancaChartObj.destroy();
+  if (mesChartObj) mesChartObj.destroy();
+
+  estadoChartObj = new Chart(document.getElementById('estadoChart'), {
+    type:'doughnut',
+    data:{labels:Object.keys(estadoCount),datasets:[{data:Object.values(estadoCount),backgroundColor:['#FFEB9C','#DEEAF1','#FFC7CE','#E2EFDA'],borderColor:['#7D4200','#2E75B6','#9C0006','#375623'],borderWidth:1.5}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}}}}
+  });
+
+  const pals = Object.keys(palancaCount).sort((a,b)=>palancaCount[b]-palancaCount[a]);
+  palancaChartObj = new Chart(document.getElementById('palancaChart'), {
+    type:'bar',
+    data:{labels:pals.map(p=>p.length>16?p.slice(0,14)+'…':p),datasets:[{data:pals.map(p=>palancaCount[p]),backgroundColor:pals.map(p=>(PALANCA_COLORS[p]||{dot:'#888'}).dot),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+
+  mesChartObj = new Chart(document.getElementById('mesChart'), {
+    type:'bar',
+    data:{labels:Object.keys(mesCounts),datasets:[{data:Object.values(mesCounts),backgroundColor:'#2E75B6',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:10}}}}}
+  });
+}
+
+// RENDER PROGRESS BARS
+function renderProgress() {
+  const palancas = Object.keys(PALANCA_COLORS);
+  let html = '';
+  palancas.forEach(pal => {
+    const total = data.filter(a=>a.palanca===pal).length;
+    const done = data.filter(a=>a.palanca===pal && a.estado==='Completado').length;
+    const curso = data.filter(a=>a.palanca===pal && a.estado==='En curso').length;
+    const pct = Math.round((done+curso*0.5)/total*100);
+    const c = PALANCA_COLORS[pal];
+    html += `<div class="progress-row">
+      <div class="progress-label"><span class="palanca-dot" style="background:${c.dot};"></span>${pal}</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%;background:${c.dot};"></div></div>
+      <div class="progress-val" style="color:${c.dot};">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('progressBars').innerHTML = html;
+}
+
+// RENDER FILTERS
+function renderFilters() {
+  const palancas = ['Todos', ...Object.keys(PALANCA_COLORS)];
+  document.getElementById('palancaFilters').innerHTML = palancas.map(p =>
+    `<button class="chip ${filters.palanca===p?'active':''}" onclick="setFilter('palanca','${p}',this)">${p}</button>`
+  ).join('');
+  const estados = ['Todos','Pendiente','En curso','Bloqueado','Completado'];
+  document.getElementById('estadoFilters').innerHTML = estados.map(e =>
+    `<button class="chip chip-estado ${filters.estado===e?'active active-'+e.toLowerCase().replace(' ','-'):''}" onclick="setFilter('estado','${e}',this)">${e}</button>`
+  ).join('');
+  const prios = ['Todos','Alta','Media'];
+  document.getElementById('prioFilters').innerHTML = prios.map(p =>
+    `<button class="chip ${filters.prioridad===p?'active':''}" onclick="setFilter('prioridad','${p}',this)">${p}</button>`
+  ).join('');
+}
+
+function setFilter(key, val, btn) {
+  filters[key] = val;
+  renderFilters();
+  renderTable(); renderKanban(); renderGantt();
+  updateResultsBar();
+}
+
+function updateResultsBar() {
+  const f = filtered();
+  document.getElementById('resultsBar').innerHTML = `<strong>${f.length}</strong> acciones · Meta nuevos: <strong>${f.reduce((s,a)=>s+(isNaN(parseInt(a.meta_nuevos))?0:parseInt(a.meta_nuevos)),0)}</strong>`;
+}
+
+// RENDER TABLE
+function renderTable() {
+  const f = filtered();
+  document.getElementById('tableBody').innerHTML = f.map((a,i) => {
+    const realIdx = data.indexOf(a);
+    const ec = a.estado==='En curso'?' col-en-curso':a.estado==='Bloqueado'?' col-bloqueado':a.estado==='Completado'?' col-completado':'';
+    const c = PALANCA_COLORS[a.palanca]||{dot:'#888',bg:'#f5f5f5',txt:'#444'};
+    return `<tr class="${ec}" onclick="openModal(${realIdx})" style="cursor:pointer;">
+      <td><span style="font-weight:700;font-size:11px;color:${c.txt};">${a.num}</span></td>
+      <td>${badge(a.prioridad,'prioridad')}</td>
+      <td style="font-weight:500;max-width:200px;">${a.accion}</td>
+      <td class="desc"><div class="desc-text">${a.descripcion}</div></td>
+      <td><span style="font-size:11px;">${palancaDot(a.palanca)}</span></td>
+      <td style="white-space:nowrap;font-size:11px;color:#555;">${a.responsable}</td>
+      <td style="white-space:nowrap;font-size:11px;color:#555;">${a.fecha_inicio}</td>
+      <td style="white-space:nowrap;font-size:11px;color:#555;">${a.fecha_limite}</td>
+      <td style="text-align:center;font-weight:600;color:${a.meta_nuevos!=='-'?'#375623':'#aaa'};">${a.meta_nuevos}</td>
+      <td>${mesDots(a.meses)}</td>
+      <td>${badge(a.estado,'estado')}</td>
+    </tr>`;
+  }).join('');
+}
+
+// RENDER KANBAN
+function renderKanban() {
+  const f = filtered();
+  const cols = ['Pendiente','En curso','Bloqueado','Completado'];
+  const col_icons = {'Pendiente':'⏳','En curso':'▶','Bloqueado':'🔒','Completado':'✓'};
+  document.getElementById('kanbanBoard').innerHTML = cols.map(col => {
+    const items = f.filter(a=>a.estado===col);
+    const ec = ESTADO_COLORS[col]||{bg:'#f5f5f5',txt:'#444'};
+    return `<div class="kanban-col">
+      <div class="kanban-head">
+        <span>${col}</span>
+        <span class="kanban-count">${items.length}</span>
+      </div>
+      ${items.map(a => {
+        const realIdx = data.indexOf(a);
+        const c = PALANCA_COLORS[a.palanca]||{dot:'#888'};
+        return `<div class="kanban-card" onclick="openModal(${realIdx})">
+          <div class="kanban-card-num" style="color:${c.dot};">${a.num}</div>
+          <div class="kanban-card-title">${a.accion}</div>
+          <div class="kanban-card-footer">
+            <span style="font-size:10px;color:#888;">${a.responsable}</span>
+            ${a.meta_nuevos!=='-'?`<span style="font-size:10px;font-weight:600;color:#375623;">+${a.meta_nuevos}</span>`:''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+// RENDER GANTT
+function renderGantt() {
+  const f = filtered();
+  const meses = ['Abr','May','Jun','Jul','Ago-Dic'];
+  document.getElementById('ganttBody').innerHTML = f.map(a => {
+    const realIdx = data.indexOf(a);
+    const c = PALANCA_COLORS[a.palanca]||{dot:'#888',bg:'#f5f5f5',txt:'#444'};
+    const mCells = meses.map(m => {
+      if (!a.meses[m]) return `<td></td>`;
+      return `<td style="padding:4px 6px;"><div class="gantt-bar" style="background:${c.dot};"></div></td>`;
+    }).join('');
+    return `<tr onclick="openModal(${realIdx})" style="cursor:pointer;">
+      <td style="font-weight:700;color:${c.txt};font-size:11px;">${a.num}</td>
+      <td style="font-weight:500;">${a.accion}</td>
+      <td><span style="font-size:11px;">${palancaDot(a.palanca)}</span></td>
+      ${mCells}
+      <td>${badge(a.estado,'estado')}</td>
+    </tr>`;
+  }).join('');
+}
+
+// MODAL
+function openModal(idx) {
+  modalIdx = idx;
+  const a = data[idx];
+  const c = PALANCA_COLORS[a.palanca]||{dot:'#888',bg:'#f5f5f5',txt:'#444'};
+  document.getElementById('m-num').innerHTML = `<span style="color:${c.txt};font-weight:700;">${a.num}</span> · <span style="background:${c.bg};color:${c.txt};padding:2px 8px;border-radius:4px;font-size:10px;">${a.palanca}</span>`;
+  document.getElementById('m-title').textContent = a.accion;
+  document.getElementById('m-grid').innerHTML = `
+    <div class="modal-field"><div class="modal-field-label">Prioridad</div><div class="modal-field-val">${badge(a.prioridad)}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Estado actual</div><div class="modal-field-val">${badge(a.estado)}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Responsable</div><div class="modal-field-val">${a.responsable}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Meta nuevos</div><div class="modal-field-val" style="color:${a.meta_nuevos!=='-'?'#375623':'#aaa'};">${a.meta_nuevos!=='-'?'+'+a.meta_nuevos+' inscritos':'—'}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Fecha inicio</div><div class="modal-field-val">${a.fecha_inicio}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Fecha límite</div><div class="modal-field-val">${a.fecha_limite}</div></div>
+    ${a.bloqueado_por!=='—'?`<div class="modal-field" style="grid-column:1/-1;background:#FFC7CE22;border:1px solid #FFC7CE;"><div class="modal-field-label" style="color:#9C0006;">⚠ Bloqueado por</div><div class="modal-field-val" style="color:#9C0006;">${a.bloqueado_por}</div></div>`:''}
+  `;
+  document.getElementById('m-desc').textContent = a.descripcion;
+  const meses = ['Abr','May','Jun','Jul','Ago-Dic'];
+  document.getElementById('m-meses').innerHTML = meses.map(m =>
+    `<span class="mes-tag ${a.meses[m]?'mes-activo':'mes-inactivo'}">${m}</span>`
+  ).join('');
+  const sel = document.getElementById('m-status-select');
+  sel.value = a.estado;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('viewTabla').style.display = view==='tabla'?'block':'none';
+  document.getElementById('viewKanban').style.display = view==='kanban'?'block':'none';
+  document.getElementById('viewGantt').style.display = view==='gantt'?'block':'none';
+}
+
+function sortBy(key) {
+  if (sortKey===key) sortAsc=!sortAsc; else { sortKey=key; sortAsc=true; }
+  renderTable();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  filters.search = e.target.value;
+  renderTable(); renderKanban(); renderGantt(); updateResultsBar();
+});
+
+function renderAll() {
+  renderCards(); renderProgress(); renderFilters();
+  renderTable(); renderKanban(); renderGantt();
+  updateResultsBar();
+  renderCharts();
+}
+
+renderAll();
+document.getElementById('last-updated').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'});
+</script>
+</body>
+</html>

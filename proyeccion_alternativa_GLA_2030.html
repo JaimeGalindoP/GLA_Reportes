@@ -1,0 +1,217 @@
+
+<style>
+.sc-btn { cursor:pointer; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:500; border:0.5px solid var(--color-border-secondary); background:var(--color-background-secondary); color:var(--color-text-secondary); transition:all .15s; }
+.sc-btn.active { background:#185FA5; color:#E6F1FB; border-color:#185FA5; }
+.leg { display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary); }
+.sq { width:10px;height:10px;border-radius:2px; }
+.asump { background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:var(--color-text-primary);margin-bottom:6px; }
+.asump-label { font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em; }
+.note { font-size:11px;color:var(--color-text-tertiary);margin-top:1rem;line-height:1.6; }
+</style>
+
+<div style="padding:1rem 0;">
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center;">
+  <span style="font-size:12px;color:var(--color-text-secondary);margin-right:4px;">Ver escenario:</span>
+  <button class="sc-btn active" id="btn-base" onclick="setScene('base')">Base — plan actual</button>
+  <button class="sc-btn" id="btn-opt" onclick="setScene('opt')">Optimista — alianzas +retención</button>
+  <button class="sc-btn" id="btn-mil" onclick="setScene('mil')">Milton — sin acción</button>
+</div>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem;" id="kpi-row">
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;">Matrícula 2030</div>
+    <div id="kpi-mat" style="font-size:20px;font-weight:500;">820</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;">Ingresos 2030</div>
+    <div id="kpi-ing" style="font-size:20px;font-weight:500;">$26.800M</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;">EBITDA 2030</div>
+    <div id="kpi-ebitda" style="font-size:20px;font-weight:500;">$3.100M</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;">Margen EBITDA</div>
+    <div id="kpi-marg" style="font-size:20px;font-weight:500;">11,6%</div>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;">Caja 2030</div>
+    <div id="kpi-caja" style="font-size:20px;font-weight:500;color:#185FA5;">$2.100M</div>
+  </div>
+</div>
+
+<div style="display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap;">
+  <span class="leg"><span class="sq" style="background:#378ADD;"></span>Ingresos</span>
+  <span class="leg"><span class="sq" style="background:#E24B4A;"></span>Costos</span>
+  <span class="leg"><span class="sq" style="background:#3B6D11;"></span>EBITDA</span>
+  <span class="leg"><span class="sq" style="background:#BA7517;opacity:.5;"></span>Milton (referencia)</span>
+</div>
+
+<div style="position:relative;width:100%;height:270px;margin-bottom:1.5rem;">
+  <canvas id="cMain"></canvas>
+</div>
+
+<div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Matrícula proyectada (estudiantes)</div>
+<div style="position:relative;width:100%;height:160px;margin-bottom:1.5rem;">
+  <canvas id="cMat"></canvas>
+</div>
+
+<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;" id="asump-title">Supuestos — Escenario base</div>
+<div id="asump-box"></div>
+
+<p class="note" id="nota-text">Escenario base: la JD logra estabilizar matrícula en ~840 en 2026–2027, con recuperación gradual gracias a alianzas comerciales (+15–20 est./año desde 2027), reducción de rotación docente al 15% (vs 67% actual) y optimización de compras (~3–4% ahorro en costos). Los ingresos crecen moderadamente por tarifas (IPC+1%) y los costos se contienen con la eficiencia del Comité de Compras.</p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const labels = ['2025\nReal','2026P','2027P','2028P','2029P','2030P'];
+
+const data = {
+  base: {
+    mat:   [null, 840, 850, 870, 895, 820],
+    ing:   [25579, 25440, 26200, 27100, 27600, 26800],
+    cos:   [21069, 21600, 22400, 23200, 23600, 23700],
+    ebitda:[4416,  3840,  3800,  3900,  4000,  3100],
+    marg:  ['17,3%','15,1%','14,5%','14,4%','14,5%','11,6%'],
+    caja:  [5420,  4273,  3800,  4100,  4500,  2100],
+    kpi: { mat:'820', ing:'$26.800M', ebitda:'$3.100M', marg:'11,6%', caja:'$2.100M', cajaColor:'#185FA5' },
+    title: 'Supuestos — Escenario base (plan actual + alianzas)',
+    asumps: [
+      ['Matrícula', 'Estabilización en 840–870 (2026–2028), leve ajuste en 2029–2030 por demografía'],
+      ['Nuevos estudiantes', '+15 a +25/año adicionales desde 2027 vía vendedora de alianzas B2B'],
+      ['Rotación docente', 'Baja progresivamente de 67% → 30% → 15% con escala salarial nueva'],
+      ['Costos', 'Suben por IPC+SMMLV pero Comité de Compras contiene con 3–4% ahorro anual'],
+      ['Ingresos', 'Crecen IPC+1% por tarifas; servicios complementarios se recuperan levemente'],
+      ['Dividendos', 'EBITDA sostenido permite distribución moderada desde 2027 si la JD lo aprueba'],
+    ],
+    nota: 'Escenario base: la JD logra estabilizar matrícula en ~840–870 entre 2026–2028, con recuperación gradual gracias a alianzas comerciales (+15–25 est. adicionales/año desde 2027 vía ejecutiva de desarrollo de mercado), reducción progresiva de rotación docente con la nueva escala salarial, y optimización de compras del 3–4% anual con el nuevo Comité de Compras. Los costos siguen la inflación pero se contienen parcialmente.'
+  },
+  opt: {
+    mat:   [null, 840, 880, 940, 1010, 1080],
+    ing:   [25579, 25700, 27500, 29800, 32000, 34000],
+    cos:   [21069, 21400, 22200, 23800, 25200, 26500],
+    ebitda:[4416,  4300,  5300,  6000,  6800,  7500],
+    marg:  ['17,3%','16,7%','19,3%','20,1%','21,3%','22,1%'],
+    caja:  [5420,  5000,  6200,  7800,  9500,  11000],
+    kpi: { mat:'1.080', ing:'$34.000M', ebitda:'$7.500M', marg:'22,1%', caja:'$11.000M', cajaColor:'#3B6D11' },
+    title: 'Supuestos — Escenario optimista (alianzas + retención fuerte)',
+    asumps: [
+      ['Matrícula', 'Recuperación sostenida: +40–70 estudiantes netos/año desde 2027'],
+      ['Nuevos estudiantes', 'Alianzas B2B generan +40/año, retención mejora a 95%+ con fidelización docente'],
+      ['Rotación docente', 'Baja a <10% en 2028: estabilidad docente = mejor retención de familias'],
+      ['Costos', 'Economías de escala con más estudiantes; compras estratégicas reducen 5–6%'],
+      ['Ingresos', 'Tarifas IPC+2% + mayor uso de servicios complementarios (restaurante, transporte)'],
+      ['Dividendos', 'EBITDA >20% permite distribución significativa desde 2027'],
+    ],
+    nota: 'Escenario optimista: la ejecutiva de alianzas genera tracción real (+40 estudiantes adicionales/año desde 2027), la rotación docente baja a <10% en 2028 gracias a la escala salarial y programa de fidelización, y la mejora en calidad académica y bilingüismo reduce los retiros por inconformidad. El colegio recupera escala y los márgenes vuelven a niveles de 2022–2023.'
+  },
+  mil: {
+    mat:   [null, 840, 796, 757, 695, 618],
+    ing:   [25579, 25439, 25917, 26012, 25065, 23575],
+    cos:   [21069, 21452, 22658, 23680, 24614, 25457],
+    ebitda:[4416,  3886,  3153,  2222,  335,  -2003],
+    marg:  ['17,3%','15,3%','12,2%','8,5%','1,3%','-8,5%'],
+    caja:  [5420,  4273,  3266,  2309,  1382,  -483],
+    kpi: { mat:'618', ing:'$23.575M', ebitda:'–$2.003M', marg:'–8,5%', caja:'–$483M', cajaColor:'#A32D2D' },
+    title: 'Supuestos — Proyección de Milton (sin acción correctiva)',
+    asumps: [
+      ['Matrícula', 'Caída continua: 840 → 618 (–26%) sin ninguna acción de recuperación'],
+      ['Nuevos estudiantes', 'No incorpora impacto de alianzas ni mejora en conversión comercial'],
+      ['Rotación docente', 'No incorpora efecto de la nueva escala salarial en retención'],
+      ['Costos', 'Suben 18,8% mientras los ingresos caen: tijera financiera inevitable'],
+      ['Ingresos', 'Solo refleja menos estudiantes × tarifa, sin crecimiento de servicios'],
+      ['Dividendos', 'En blanco — no proyecta distribución en ningún año'],
+    ],
+    nota: 'Proyección de Milton: asume caída continua de matrícula sin ninguna acción correctiva, costos que suben por inflación/SMMLV sin optimización, y no incorpora el impacto de la escala salarial nueva, las alianzas comerciales, ni el Comité de Compras. Es matemáticamente correcto si no se hace nada, pero contradice el plan estratégico de la JD y el rector.'
+  }
+};
+
+let scene = 'base';
+let chartMain, chartMat;
+
+function fmt(v) { return v < 0 ? '-$'+Math.abs(Math.round(v/1000)*1000/1000).toFixed(0)+'B' : '$'+Math.round(v/1000)+'B'; }
+
+function buildAsumps(sc) {
+  const box = document.getElementById('asump-box');
+  box.innerHTML = data[sc].asumps.map(([l,v]) => `
+    <div class="asump"><div class="asump-label">${l}</div>${v}</div>
+  `).join('');
+}
+
+function setScene(sc) {
+  scene = sc;
+  ['base','opt','mil'].forEach(s => {
+    document.getElementById('btn-'+s).classList.toggle('active', s===sc);
+  });
+  const d = data[sc];
+  document.getElementById('kpi-mat').textContent = d.kpi.mat;
+  document.getElementById('kpi-ing').textContent = d.kpi.ing;
+  document.getElementById('kpi-ebitda').textContent = d.kpi.ebitda;
+  document.getElementById('kpi-marg').textContent = d.kpi.marg;
+  document.getElementById('kpi-caja').textContent = d.kpi.caja;
+  document.getElementById('kpi-caja').style.color = d.kpi.cajaColor;
+  document.getElementById('asump-title').textContent = d.title;
+  document.getElementById('nota-text').textContent = d.nota;
+  buildAsumps(sc);
+
+  const milEbitda = data.mil.ebitda;
+  chartMain.data.datasets[0].data = d.ing;
+  chartMain.data.datasets[1].data = d.cos;
+  chartMain.data.datasets[2].data = d.ebitda;
+  chartMain.data.datasets[3].data = sc !== 'mil' ? milEbitda : null;
+  chartMain.update();
+  chartMat.data.datasets[0].data = d.mat;
+  chartMat.data.datasets[0].borderColor = sc === 'mil' ? '#E24B4A' : sc === 'opt' ? '#3B6D11' : '#378ADD';
+  chartMat.data.datasets[0].backgroundColor = sc === 'mil' ? 'rgba(226,75,74,0.1)' : sc === 'opt' ? 'rgba(59,109,17,0.1)' : 'rgba(55,138,221,0.1)';
+  chartMat.update();
+}
+
+window.addEventListener('load', () => {
+  const d = data.base;
+  chartMain = new Chart(document.getElementById('cMain'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'Ingresos', data: d.ing, type:'line', borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.1)', fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:'#378ADD', borderWidth:2, yAxisID:'y' },
+        { label:'Costos', data: d.cos, type:'line', borderColor:'#E24B4A', backgroundColor:'rgba(226,75,74,0.08)', fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:'#E24B4A', borderWidth:2, yAxisID:'y' },
+        { label:'EBITDA', data: d.ebitda, backgroundColor: d.ebitda.map(v => v>=0?'rgba(59,109,17,0.75)':'rgba(163,45,45,0.75)'), borderRadius:3, yAxisID:'y2' },
+        { label:'Milton ref', data: data.mil.ebitda, type:'line', borderColor:'rgba(186,117,23,0.4)', borderDash:[4,4], pointRadius:3, fill:false, tension:0.3, borderWidth:1.5, yAxisID:'y2' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{display:false}, tooltip:{mode:'index'} },
+      scales: {
+        y: { position:'left', ticks:{font:{size:11}, callback: v=>'$'+Math.round(v/1000)+'B'}, grid:{color:'rgba(128,128,128,0.08)'} },
+        y2: { position:'right', ticks:{font:{size:11}, callback: v=>'$'+Math.round(v/1000)+'B'}, grid:{drawOnChartArea:false} },
+        x: { ticks:{font:{size:10}, autoSkip:false} }
+      }
+    }
+  });
+
+  chartMat = new Chart(document.getElementById('cMat'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: d.mat,
+        borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.1)', fill:true,
+        tension:0.3, pointRadius:5, pointBackgroundColor:'#378ADD', borderWidth:2
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false} },
+      scales:{
+        y:{ min:500, max:1200, ticks:{font:{size:11}, callback:v=>v+' est.'}, grid:{color:'rgba(128,128,128,0.08)'} },
+        x:{ ticks:{font:{size:10}, autoSkip:false} }
+      }
+    }
+  });
+
+  buildAsumps('base');
+});
+</script>

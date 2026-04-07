@@ -1,0 +1,203 @@
+
+<style>
+.sc-btn{cursor:pointer;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary);}
+.sc-btn.active{background:#185FA5;color:#E6F1FB;border-color:#185FA5;}
+.kpi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;flex:1;min-width:110px;}
+.kpi-label{font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px;}
+.kpi-val{font-size:20px;font-weight:500;}
+.pal{border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:6px;font-size:12px;}
+.pal-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary);}
+.sq{width:10px;height:10px;border-radius:2px;}
+.nota{font-size:11px;color:var(--color-text-tertiary);line-height:1.6;margin-top:1rem;}
+</style>
+
+<div style="padding:1rem 0;">
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center;">
+  <span style="font-size:12px;color:var(--color-text-secondary);margin-right:4px;">Escenario:</span>
+  <button class="sc-btn active" id="btn-b" onclick="setS('b')">Base — 50% ejecución del plan</button>
+  <button class="sc-btn" id="btn-o" onclick="setS('o')">Optimista — 75% ejecución</button>
+  <button class="sc-btn" id="btn-m" onclick="setS('m')">Milton — sin plan</button>
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem;">
+  <div class="kpi"><div class="kpi-label">Nuevos 2026 (adicionales)</div><div class="kpi-val" id="k1">+80</div></div>
+  <div class="kpi"><div class="kpi-label">Matrícula 2026</div><div class="kpi-val" id="k2">920</div></div>
+  <div class="kpi"><div class="kpi-label">Matrícula 2030</div><div class="kpi-val" id="k3">980</div></div>
+  <div class="kpi"><div class="kpi-label">EBITDA 2030</div><div class="kpi-val" id="k4">$4.200M</div></div>
+  <div class="kpi"><div class="kpi-label">Margen 2030</div><div class="kpi-val" id="k5">15,1%</div></div>
+  <div class="kpi"><div class="kpi-label">Caja 2030</div><div class="kpi-val" id="k6" style="color:#185FA5;">$3.800M</div></div>
+</div>
+
+<div style="display:flex;gap:14px;margin-bottom:8px;flex-wrap:wrap;">
+  <span class="leg"><span class="sq" style="background:#378ADD;"></span>Ingresos</span>
+  <span class="leg"><span class="sq" style="background:#E24B4A;"></span>Costos</span>
+  <span class="leg"><span class="sq" style="background:#3B6D11;"></span>EBITDA</span>
+  <span class="leg"><span class="sq" style="background:#BA7517;opacity:.4;border:1px dashed #BA7517;"></span>Milton (ref.)</span>
+</div>
+
+<div style="position:relative;width:100%;height:260px;margin-bottom:1.5rem;">
+  <canvas id="cA"></canvas>
+</div>
+
+<div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:8px;">Matrícula proyectada — 840 base + impacto plan de acción</div>
+<div style="position:relative;width:100%;height:155px;margin-bottom:1.5rem;">
+  <canvas id="cB"></canvas>
+</div>
+
+<div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;" id="pal-title">Impacto por palanca — Escenario base (50% ejecución)</div>
+<div id="pal-box"></div>
+
+<p class="nota" id="nota"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const labs = ['2025\nReal','2026P','2027P','2028P','2029P','2030P'];
+
+const sc = {
+  b: {
+    mat:   [null, 920, 960, 990, 1010, 980],
+    ing:   [25579, 26800, 28200, 29400, 30200, 27800],
+    cos:   [21069, 22100, 23200, 24100, 24800, 23600],
+    ebitda:[4416,  4700,  5000,  5300,  5400,  4200],
+    caja:  [5420,  5500,  6200,  7200,  8100,  3800],
+    k:{ n:'+80', m26:'920', m30:'980', e:'$4.200M', mg:'15,1%', c:'$3.800M', cc:'#185FA5' },
+    pTitle:'Impacto por palanca — Base (50% ejecución · ~$5M COP/mes pauta)',
+    pals:[
+      ['#E6F1FB','#0C447C','Pauta Digital','PAU-01 a PAU-08','Meta plan: 125 nuevos · Base 50%: ~60','60 nuevos'],
+      ['#EAF3DE','#27500A','Email & CRM','CRM-01 a CRM-07 · BLOQUEADOR: dominio correo','10K leads fríos reactivados · 3% conversión = 300 leads calientes · Base: ~20 nuevos','20 nuevos'],
+      ['#FAEEDA','#633806','Eventos','EVE-01 a EVE-04 · Play Days + Webinars + Noche Familias','Meta: 95 nuevos · Base 50%: ~40 · Depende de CRM-05 (landing)','40 nuevos'],
+      ['#FCEBEB','#791F1F','Admisiones & Cierre','ADM-01 a ADM-05 · Closers + protocolo visita + grabaciones','2 closers externos por comisión $150-200K/matrícula · Meta: 40 · Base: ~20','20 nuevos'],
+      ['#E1F5EE','#085041','Pipeline & Alianzas','PIP-01 a PIP-04 · Jardines + embajadores + referidos grado 11','Jardines aliados + K4→K5 + programa referidos · Meta: 72 · Base: ~35','35 nuevos'],
+      ['#EEEDFE','#3C3489','Retención','RET-01 a RET-06 · Protocolo alerta + 3°/4° + 8°→9°→10°','Evitar pico diciembre (29 retiros 2025) · Reducir retiro neto en 30-40 estudiantes','–35 retiros'],
+      ['#FBEAF0','#72243E','Contenido & RRSS','CON-01 a CON-04 · Reels semanales + Escuela de Padres','Soporte de todas las palancas · No genera directamente nuevos · Mejora conversión','Apoyo'],
+    ],
+    nota:'Escenario base (50% ejecución): el bloqueador crítico es CRM-01 (dominio correo de Clientify), que desbloquea el 40% del plan. Si Milton lo activa esta semana, se liberan 7 acciones con potencial de 100+ matrículas. Con ejecución al 50% del plan, la matrícula sube a ~920 en 2026 y escala a ~980 en 2030, con EBITDA sostenido y caja positiva.'
+  },
+  o: {
+    mat:   [null, 970, 1040, 1100, 1150, 1080],
+    ing:   [25579, 28200, 30500, 32800, 34500, 30200],
+    cos:   [21069, 22600, 24000, 25200, 26100, 24800],
+    ebitda:[4416,  5600,  6500,  7600,  8400,  5400],
+    caja:  [5420,  6200,  8000, 10200, 12500,  6800],
+    k:{ n:'+130', m26:'970', m30:'1.080', e:'$5.400M', mg:'17,9%', c:'$6.800M', cc:'#3B6D11' },
+    pTitle:'Impacto por palanca — Optimista (75% ejecución · plan completo operando)',
+    pals:[
+      ['#E6F1FB','#0C447C','Pauta Digital','PAU-01 a PAU-08 · Pixel activo + creativos por ciclo','CPL $8-10K · Intereses escalado · Alianzas corporativas (Colsanitas, Bavaria) · ~90 nuevos','90 nuevos'],
+      ['#EAF3DE','#27500A','Email & CRM','CRM-01 activo · 10K leads fríos · 3 funnels por ciclo','300+ leads calientes reactivados · Nurturing automático · ~40 nuevos sin costo pauta adicional','40 nuevos'],
+      ['#FAEEDA','#633806','Eventos','Play Days mensuales + 2 Noches de Familias + webinars externos','60 asistentes/evento · 14% conversión · Closers presentes en Noches de Familias · ~70 nuevos','70 nuevos'],
+      ['#FCEBEB','#791F1F','Admisiones & Cierre','Closers con banco grabaciones + protocolo 45 min + respuesta <2h','Conversión visita→proceso sube 45%→70% · Closers generan 40 matrículas adicionales','55 nuevos'],
+      ['#E1F5EE','#085041','Pipeline & Alianzas','5 jardines aliados + K4→K5 + 50 embajadoras + referidos 11°','Ejecutiva de alianzas con empresas + jardines activos · ~55 nuevos','55 nuevos'],
+      ['#EEEDFE','#3C3489','Retención','Protocolo octubre activado + intervención 3°/4° + plan 8°→10°','Pico diciembre baja de 29 a <10 · Reduce retiro neto en 55+ estudiantes','–55 retiros'],
+      ['#FBEAF0','#72243E','Contenido & RRSS','Reel semanal sistemático + Escuela de Padres en Hotmart','Mejora conversión del embudo +15% · Banco de contenido genera leads orgánicos','Apoyo +15%'],
+    ],
+    nota:'Escenario optimista (75% ejecución): todas las palancas operando, CRM activo, closers funcionando y alianzas corporativas generando leads. La matrícula llega a ~970 en 2026 y puede alcanzar 1.080 en 2029, recuperando niveles de 2022. El EBITDA ajustado supera el 20% y la caja acumulada es suficiente para distribución de dividendos significativa desde 2027.'
+  },
+  m: {
+    mat:   [null, 840, 796, 757, 695, 618],
+    ing:   [25579, 25439, 25917, 26012, 25065, 23575],
+    cos:   [21069, 21452, 22658, 23680, 24614, 25457],
+    ebitda:[4416,  3886,  3153,  2222,  335,  -2003],
+    caja:  [5420,  4273,  3266,  2309,  1382,  -483],
+    k:{ n:'0', m26:'840', m30:'618', e:'–$2.003M', mg:'–8,5%', c:'–$483M', cc:'#A32D2D' },
+    pTitle:'Sin plan de acción — proyección de Milton',
+    pals:[
+      ['#F1EFE8','#5F5E5A','Pauta Digital','No considera mejora en conversión ni creativos por ciclo','CPL sin optimizar · Pixel sin instalar · Sin alianzas corporativas','0 nuevos adicionales'],
+      ['#F1EFE8','#5F5E5A','Email & CRM','10K leads fríos sin reactivar · CRM sin automatizar','Sin funnels · Sin nurturing · Alejandra sigue haciendo traslado manual','0 nuevos adicionales'],
+      ['#F1EFE8','#5F5E5A','Eventos','Play Days sin landing CRM · Sin seguimiento sistematizado','Conversión baja por falta de seguimiento < 48h','0 nuevos adicionales'],
+      ['#F1EFE8','#5F5E5A','Admisiones & Cierre','Sin closers · Sin protocolo estándar · Sin grabaciones','Conversión visita→proceso se mantiene en 45%','0 nuevos adicionales'],
+      ['#F1EFE8','#5F5E5A','Pipeline & Alianzas','Jardines sin activar · Sin programa embajadoras','Ejecutiva de alianzas mencionada pero sin acciones sistematizadas','0 nuevos adicionales'],
+      ['#F1EFE8','#5F5E5A','Retención','Sin protocolo de alerta temprana · Sin intervención 3°/4°','Pico diciembre se repite: 29+ retiros · Tendencia continúa','Sin mejora'],
+      ['#F1EFE8','#5F5E5A','Contenido & RRSS','Sin flujo sistematizado · Sin subtítulos · Sin Escuela de Padres','Orgánico sin estrategia clara','Sin impacto'],
+    ],
+    nota:'Proyección de Milton: no incorpora ninguna de las 38 acciones del plan. La matrícula cae de 840 a 618 (–26%) en 4 años. El EBITDA se vuelve negativo en 2030 (–$2.003M) y la caja entra en terreno negativo (–$483M). Es el escenario de "no hacer nada", que contradice lo que ya está ejecutado por la JD y el rector.'
+  }
+};
+
+let cur='b', cA, cB;
+
+function setS(s){
+  cur=s;
+  ['b','o','m'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===s));
+  const d=sc[s];
+  document.getElementById('k1').textContent=d.k.n;
+  document.getElementById('k2').textContent=d.k.m26;
+  document.getElementById('k3').textContent=d.k.m30;
+  document.getElementById('k4').textContent=d.k.e;
+  document.getElementById('k5').textContent=d.k.mg;
+  document.getElementById('k6').textContent=d.k.c;
+  document.getElementById('k6').style.color=d.k.cc;
+  document.getElementById('pal-title').textContent=d.pTitle;
+  document.getElementById('nota').textContent=d.nota;
+  buildPals(s);
+  cA.data.datasets[0].data=d.ing;
+  cA.data.datasets[1].data=d.cos;
+  cA.data.datasets[2].data=d.ebitda;
+  cA.update();
+  const bcolor=s==='m'?'#E24B4A':s==='o'?'#3B6D11':'#378ADD';
+  const bfill=s==='m'?'rgba(226,75,74,0.1)':s==='o'?'rgba(59,109,17,0.1)':'rgba(55,138,221,0.1)';
+  cB.data.datasets[0].data=d.mat;
+  cB.data.datasets[0].borderColor=bcolor;
+  cB.data.datasets[0].backgroundColor=bfill;
+  cB.data.datasets[0].pointBackgroundColor=bcolor;
+  cB.update();
+}
+
+function buildPals(s){
+  const box=document.getElementById('pal-box');
+  box.innerHTML=sc[s].pals.map(([bg,tc,name,acc,det,imp])=>`
+    <div class="pal" style="background:${bg};">
+      <div class="pal-label" style="color:${tc};">${name} — ${imp}</div>
+      <div style="color:${tc};font-size:11px;margin-bottom:2px;">${acc}</div>
+      <div style="color:${tc};opacity:.85;">${det}</div>
+    </div>
+  `).join('');
+}
+
+window.addEventListener('load',()=>{
+  const milEb=sc.m.ebitda;
+  cA=new Chart(document.getElementById('cA'),{
+    type:'bar',
+    data:{
+      labels:labs,
+      datasets:[
+        {label:'Ingresos',data:sc.b.ing,type:'line',borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.08)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#378ADD',borderWidth:2,yAxisID:'y'},
+        {label:'Costos',data:sc.b.cos,type:'line',borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.06)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#E24B4A',borderWidth:2,yAxisID:'y'},
+        {label:'EBITDA',data:sc.b.ebitda,backgroundColor:sc.b.ebitda.map(v=>v>=0?'rgba(59,109,17,0.75)':'rgba(163,45,45,0.75)'),borderRadius:3,yAxisID:'y2'},
+        {label:'Milton',data:milEb,type:'line',borderColor:'rgba(186,117,23,0.35)',borderDash:[4,4],pointRadius:2,fill:false,tension:.3,borderWidth:1.5,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index'}},
+      scales:{
+        y:{position:'left',ticks:{font:{size:11},callback:v=>'$'+Math.round(v/1000)+'B'},grid:{color:'rgba(128,128,128,0.08)'}},
+        y2:{position:'right',ticks:{font:{size:11},callback:v=>(v<0?'-':'')+'$'+Math.abs(Math.round(v/1000))+'B'},grid:{drawOnChartArea:false}},
+        x:{ticks:{font:{size:10},autoSkip:false}}
+      }
+    }
+  });
+  cB=new Chart(document.getElementById('cB'),{
+    type:'line',
+    data:{
+      labels:labs,
+      datasets:[{
+        data:sc.b.mat,
+        borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.1)',fill:true,
+        tension:.3,pointRadius:5,pointBackgroundColor:'#378ADD',borderWidth:2
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        y:{min:550,max:1200,ticks:{font:{size:11},callback:v=>v+' est.'},grid:{color:'rgba(128,128,128,0.08)'}},
+        x:{ticks:{font:{size:10},autoSkip:false}}
+      }
+    }
+  });
+  buildPals('b');
+});
+</script>

@@ -1,0 +1,161 @@
+
+<style>
+  .root { font-family: var(--font-sans); color: var(--color-text-primary); padding: 0.5rem 0; }
+  .section-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+  .country-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 20px; margin-bottom: 16px; position: relative; }
+  .country-card.winner { border: 2px solid #3266AD; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: var(--border-radius-md); margin-bottom: 10px; }
+  .badge-1 { background: #B5D4F4; color: #0C447C; }
+  .badge-2 { background: #C0DD97; color: #27500A; }
+  .badge-3 { background: #D3D1C7; color: #444441; }
+  .country-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .rank-num { font-size: 36px; font-weight: 500; line-height: 1; color: var(--color-text-secondary); min-width: 40px; }
+  .rank-num.r1 { color: #185FA5; }
+  .rank-num.r2 { color: #3B6D11; }
+  .country-title { font-size: 18px; font-weight: 500; }
+  .country-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+  .score-bar-wrap { margin-bottom: 14px; }
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .score-label { font-size: 12px; color: var(--color-text-secondary); width: 160px; flex-shrink: 0; }
+  .score-track { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .score-val { font-size: 12px; font-weight: 500; width: 20px; text-align: right; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 11px; padding: 3px 9px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+  .insight { font-size: 13px; color: var(--color-text-secondary); border-left: 3px solid var(--color-border-secondary); padding-left: 12px; margin-top: 12px; line-height: 1.6; }
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 20px; }
+  .metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px; text-align: center; }
+  .metric-val { font-size: 20px; font-weight: 500; }
+  .metric-lbl { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; }
+  .summary-row { display: flex; gap: 8px; align-items: center; padding: 10px 0; border-top: 0.5px solid var(--color-border-tertiary); }
+  .summary-rank { font-size: 13px; font-weight: 500; min-width: 20px; }
+  .summary-name { font-size: 13px; flex: 1; }
+  .summary-score { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); }
+  .total-score { font-size: 22px; font-weight: 500; }
+  .total-label { font-size: 11px; color: var(--color-text-secondary); }
+</style>
+
+<div class="root">
+  <h2 class="sr-only">Ranking de los 3 mejores países para exportar conferencias virtuales de ACC / Kital</h2>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-val" style="color: #185FA5;">3</div>
+      <div class="metric-lbl">criterios evaluados</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: #3B6D11;">7</div>
+      <div class="metric-lbl">dimensiones por país</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val" style="color: #5F5E5A;">35</div>
+      <div class="metric-lbl">puntos máximos</div>
+    </div>
+  </div>
+
+  <!-- PAÍS #1: MÉXICO -->
+  <div class="country-card winner">
+    <span class="badge badge-1">Recomendado para empezar</span>
+    <div class="country-header">
+      <div class="rank-num r1">1</div>
+      <div>
+        <div class="country-title">México</div>
+        <div class="country-sub">El mercado más grande y más urgente de Latinoamérica</div>
+      </div>
+      <div style="margin-left:auto; text-align:right;">
+        <div class="total-score" style="color:#185FA5;">31</div>
+        <div class="total-label">/ 35 pts</div>
+      </div>
+    </div>
+    <div class="score-bar-wrap">
+      <div class="score-row"><span class="score-label">Tamaño y demanda de mercado</span><div class="score-track"><div class="score-fill" style="width:100%; background:#378ADD;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Urgencia del problema</span><div class="score-track"><div class="score-fill" style="width:100%; background:#378ADD;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Madurez para comprar online</span><div class="score-track"><div class="score-fill" style="width:80%; background:#378ADD;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Facilidad de pago (USD)</span><div class="score-track"><div class="score-fill" style="width:80%; background:#378ADD;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Acceso a prospectos LinkedIn</span><div class="score-track"><div class="score-fill" style="width:100%; background:#378ADD;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Compatibilidad cultural</span><div class="score-track"><div class="score-fill" style="width:80%; background:#378ADD;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Zona horaria con Colombia</span><div class="score-track"><div class="score-fill" style="width:80%; background:#378ADD;"></div></div><span class="score-val">4</span></div>
+    </div>
+    <div class="tags">
+      <span class="tag">NOM-035 obliga a actuar</span>
+      <span class="tag">94% sin cultura de bienestar</span>
+      <span class="tag">140M habitantes</span>
+      <span class="tag">AMEDIRH: HR community activa</span>
+      <span class="tag">Nearshoring = urgencia liderazgo</span>
+    </div>
+    <div class="insight">El 94% de empresas mexicanas opera con mínimos de bienestar y la NOM-035 presiona a todas las empresas a actuar. Hay brecha real y urgencia normativa — escenario ideal para vender.</div>
+  </div>
+
+  <!-- PAÍS #2: CHILE -->
+  <div class="country-card">
+    <span class="badge badge-2">Segundo mercado a activar</span>
+    <div class="country-header">
+      <div class="rank-num r2">2</div>
+      <div>
+        <div class="country-title">Chile</div>
+        <div class="country-sub">Mercado pequeño pero maduro y dispuesto a pagar</div>
+      </div>
+      <div style="margin-left:auto; text-align:right;">
+        <div class="total-score" style="color:#3B6D11;">27</div>
+        <div class="total-label">/ 35 pts</div>
+      </div>
+    </div>
+    <div class="score-bar-wrap">
+      <div class="score-row"><span class="score-label">Tamaño y demanda de mercado</span><div class="score-track"><div class="score-fill" style="width:60%; background:#639922;"></div></div><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-label">Urgencia del problema</span><div class="score-track"><div class="score-fill" style="width:80%; background:#639922;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Madurez para comprar online</span><div class="score-track"><div class="score-fill" style="width:100%; background:#639922;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Facilidad de pago (USD)</span><div class="score-track"><div class="score-fill" style="width:100%; background:#639922;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Acceso a prospectos LinkedIn</span><div class="score-track"><div class="score-fill" style="width:80%; background:#639922;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Compatibilidad cultural</span><div class="score-track"><div class="score-fill" style="width:60%; background:#639922;"></div></div><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-label">Zona horaria con Colombia</span><div class="score-track"><div class="score-fill" style="width:60%; background:#639922;"></div></div><span class="score-val">3</span></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Ley Karin vigente 2025</span>
+      <span class="tag">46% renuncia sin desarrollo</span>
+      <span class="tag">Mayor PIB per cápita LATAM</span>
+      <span class="tag">SENCE: franquicia tributaria</span>
+      <span class="tag">Cultura de liderazgo humanista</span>
+    </div>
+    <div class="insight">Chile tiene el mayor PIB per cápita de Latinoamérica y el 80% de trabajadores valora el desarrollo profesional como factor de permanencia. El precio que están dispuestos a pagar es más alto que en México.</div>
+  </div>
+
+  <!-- PAÍS #3: ESPAÑA -->
+  <div class="country-card">
+    <span class="badge badge-3">Tercer mercado — mayor ticket, mayor plazo</span>
+    <div class="country-header">
+      <div class="rank-num" style="color: var(--color-text-secondary);">3</div>
+      <div>
+        <div class="country-title">España</div>
+        <div class="country-sub">Mercado premium con alta demanda — ciclo de venta más largo</div>
+      </div>
+      <div style="margin-left:auto; text-align:right;">
+        <div class="total-score" style="color: var(--color-text-secondary);">25</div>
+        <div class="total-label">/ 35 pts</div>
+      </div>
+    </div>
+    <div class="score-bar-wrap">
+      <div class="score-row"><span class="score-label">Tamaño y demanda de mercado</span><div class="score-track"><div class="score-fill" style="width:100%; background:#888780;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Urgencia del problema</span><div class="score-track"><div class="score-fill" style="width:60%; background:#888780;"></div></div><span class="score-val">3</span></div>
+      <div class="score-row"><span class="score-label">Madurez para comprar online</span><div class="score-track"><div class="score-fill" style="width:100%; background:#888780;"></div></div><span class="score-val">5</span></div>
+      <div class="score-row"><span class="score-label">Facilidad de pago (USD/EUR)</span><div class="score-track"><div class="score-fill" style="width:80%; background:#888780;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Acceso a prospectos LinkedIn</span><div class="score-track"><div class="score-fill" style="width:80%; background:#888780;"></div></div><span class="score-val">4</span></div>
+      <div class="score-row"><span class="score-label">Compatibilidad cultural</span><div class="score-track"><div class="score-fill" style="width:40%; background:#888780;"></div></div><span class="score-val">2</span></div>
+      <div class="score-row"><span class="score-label">Zona horaria con Colombia</span><div class="score-track"><div class="score-fill" style="width:40%; background:#888780;"></div></div><span class="score-val">2</span></div>
+    </div>
+    <div class="tags">
+      <span class="tag">2.150M EUR formación anual</span>
+      <span class="tag">Liderazgo: 12% crecimiento/año</span>
+      <span class="tag">Soft skills +30% proyección</span>
+      <span class="tag">Conferencias virtuales maduras</span>
+      <span class="tag">+6h diferencia horaria</span>
+    </div>
+    <div class="insight">España tiene un mercado de formación empresarial de €2.150M con crecimiento del 12% anual en liderazgo. El desafío es la diferencia horaria (+6h) y que los españoles prefieren proveedores locales — requiere más tiempo para ganar confianza.</div>
+  </div>
+
+  <div style="border-top: 0.5px solid var(--color-border-tertiary); padding-top: 14px; margin-top: 4px;">
+    <div class="section-label">Resumen de puntuación</div>
+    <div class="summary-row"><span class="summary-rank" style="color:#185FA5;">1</span><span class="summary-name">México</span><div style="flex:1; height:4px; background:var(--color-background-secondary); border-radius:2px; overflow:hidden; margin: 0 12px;"><div style="width:88.5%; height:100%; background:#378ADD; border-radius:2px;"></div></div><span class="summary-score">31 / 35</span></div>
+    <div class="summary-row"><span class="summary-rank" style="color:#3B6D11;">2</span><span class="summary-name">Chile</span><div style="flex:1; height:4px; background:var(--color-background-secondary); border-radius:2px; overflow:hidden; margin: 0 12px;"><div style="width:77%; height:100%; background:#639922; border-radius:2px;"></div></div><span class="summary-score">27 / 35</span></div>
+    <div class="summary-row"><span class="summary-rank">3</span><span class="summary-name">España</span><div style="flex:1; height:4px; background:var(--color-background-secondary); border-radius:2px; overflow:hidden; margin: 0 12px;"><div style="width:71.4%; height:100%; background:#888780; border-radius:2px;"></div></div><span class="summary-score">25 / 35</span></div>
+  </div>
+</div>

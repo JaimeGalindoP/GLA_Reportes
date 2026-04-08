@@ -1,0 +1,302 @@
+
+<style>
+  .root{font-family:var(--font-sans);color:var(--color-text-primary);padding:0.5rem 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:8px 10px;border-bottom:1px solid var(--color-border-tertiary);white-space:nowrap}
+  td{padding:9px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.5}
+  tr:last-child td{border-bottom:none}
+  .country-cell{min-width:90px}
+  .flag-name{font-weight:500;font-size:13px}
+  .pop{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .rank-badge{display:inline-block;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;margin-right:5px}
+  .r1{background:#B5D4F4;color:#0C447C}
+  .r2{background:#C0DD97;color:#27500A}
+  .r3{background:#FAC775;color:#633806}
+  .r4{background:#D3D1C7;color:#444441}
+  .r5{background:#F4C0D1;color:#72243E}
+  .score-wrap{display:flex;align-items:center;gap:7px}
+  .score-num{font-size:16px;font-weight:500;min-width:28px}
+  .bar-track{flex:1;height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;min-width:50px}
+  .bar-fill{height:100%;border-radius:3px}
+  .dot-row{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+  .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .dot-full{background:#378ADD}
+  .dot-empty{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary)}
+  .tag-sm{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin:2px 2px 0 0;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+  .winner-row{background:rgba(55,138,221,0.04)}
+  .section-hdr{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.05em;padding:14px 0 8px;border-top:0.5px solid var(--color-border-tertiary);margin-top:16px}
+  .recommend-chip{font-size:10px;font-weight:500;padding:2px 8px;border-radius:var(--border-radius-md);display:inline-block;margin-top:4px}
+  .chip-now{background:#B5D4F4;color:#0C447C}
+  .chip-s2{background:#C0DD97;color:#27500A}
+  .chip-s3{background:#FAC775;color:#633806}
+  .chip-wait{background:#D3D1C7;color:#444441}
+  .insight-cell{font-size:12px;color:var(--color-text-secondary);line-height:1.55;max-width:220px}
+  .total-cell{font-size:18px;font-weight:500;white-space:nowrap}
+</style>
+
+<div class="root">
+  <h2 class="sr-only">Análisis comparativo de 5 países para exportar conferencias virtuales ACC / Kital</h2>
+
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:14px;">
+    Escala 1–5 por dimensión · 7 dimensiones · máximo 35 puntos · Datos a abril 2026
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:110px">País</th>
+        <th>Tamaño<br>mercado</th>
+        <th>Urgencia<br>del problema</th>
+        <th>Madurez<br>compra online</th>
+        <th>Facilidad<br>de pago</th>
+        <th>Prospectos<br>LinkedIn</th>
+        <th>Compatib.<br>cultural</th>
+        <th>Zona<br>horaria</th>
+        <th>Total</th>
+        <th style="width:220px">Insight clave</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- MÉXICO -->
+      <tr class="winner-row">
+        <td class="country-cell">
+          <span class="rank-badge r1">1</span>
+          <span class="flag-name">México</span>
+          <div class="pop">140M hab.</div>
+          <span class="recommend-chip chip-now">Empezar aquí</span>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">Mercado más grande LATAM</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">NOM-035 obliga</div>
+          <div class="tag-sm">94% sin cultura bienestar</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">Nearshoring acelera</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">USD / transferencia</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">AMEDIRH activa</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">Muy similar Colombia</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#185FA5">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#378ADD"></div></div></div>
+          <div class="tag-sm">−1h Colombia</div>
+        </td>
+        <td class="total-cell" style="color:#185FA5">31/35</td>
+        <td class="insight-cell">El 94% de empresas opera con mínimos de bienestar y la NOM-035 convierte liderazgo y salud organizacional en obligación legal. Brecha enorme + urgencia normativa.</td>
+      </tr>
+
+      <!-- CHILE -->
+      <tr>
+        <td class="country-cell">
+          <span class="rank-badge r2">2</span>
+          <span class="flag-name">Chile</span>
+          <div class="pop">19M hab.</div>
+          <span class="recommend-chip chip-s2">Sprint 2 paralelo</span>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#639922"></div></div></div>
+          <div class="tag-sm">Pequeño, alto ticket</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#639922"></div></div></div>
+          <div class="tag-sm">Ley Karin 2025</div>
+          <div class="tag-sm">46% rota sin desarrollo</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#639922"></div></div></div>
+          <div class="tag-sm">Cultura digital madura</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#639922"></div></div></div>
+          <div class="tag-sm">Mayor PIB per cápita</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#639922"></div></div></div>
+          <div class="tag-sm">Comunidad HR activa</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#639922"></div></div></div>
+          <div class="tag-sm">Formales, directos</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#3B6D11">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#639922"></div></div></div>
+          <div class="tag-sm">−2h Colombia</div>
+        </td>
+        <td class="total-cell" style="color:#3B6D11">27/35</td>
+        <td class="insight-cell">80% de trabajadores valora desarrollo profesional como factor de permanencia. Dispuestos a pagar más. La Ley Karin crea demanda directa de temas de liderazgo y bienestar.</td>
+      </tr>
+
+      <!-- PERÚ -->
+      <tr>
+        <td class="country-cell">
+          <span class="rank-badge r3">3</span>
+          <span class="flag-name">Perú</span>
+          <div class="pop">33M hab.</div>
+          <span class="recommend-chip chip-s3">Sprint 3</span>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">Mercado creciente</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">Liderazgo: prioridad #1 RRHH</div>
+          <div class="tag-sm">Premio ABE activo</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">En desarrollo</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">USD aceptado</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">Comunidad RRHH activa</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">Muy cercano Colombia</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#BA7517">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#EF9F27"></div></div></div>
+          <div class="tag-sm">Misma hora Colombia</div>
+        </td>
+        <td class="total-cell" style="color:#BA7517">26/35</td>
+        <td class="insight-cell">Mercer 2025: mejorar habilidades de gerentes escaló del puesto 18 al #1 en prioridades de RRHH. Urgencia enorme pero mercado menos maduro para pagar en USD.</td>
+      </tr>
+
+      <!-- COSTA RICA -->
+      <tr>
+        <td class="country-cell">
+          <span class="rank-badge r4">4</span>
+          <span class="flag-name">Costa Rica</span>
+          <div class="pop">5.2M hab.</div>
+          <span class="recommend-chip chip-s3">Nicho multinat.</span>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">2</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:#888780"></div></div></div>
+          <div class="tag-sm">Pequeño pero denso</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#888780"></div></div></div>
+          <div class="tag-sm">Foro Talento Humano activo</div>
+          <div class="tag-sm">Brecha salud mental CCSS</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#888780"></div></div></div>
+          <div class="tag-sm">Hub tecnológico LATAM</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#888780"></div></div></div>
+          <div class="tag-sm">USD moneda habitual</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#888780"></div></div></div>
+          <div class="tag-sm">Comunidad CICR activa</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#888780"></div></div></div>
+          <div class="tag-sm">Muy similar Colombia</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#5F5E5A">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#888780"></div></div></div>
+          <div class="tag-sm">−1h Colombia</div>
+        </td>
+        <td class="total-cell" style="color:#5F5E5A">24/35</td>
+        <td class="insight-cell">Mercado pequeño pero con alta concentración de multinacionales (Intel, Amazon, HP). El acceso a USD es natural y hay demanda documentada de liderazgo consciente.</td>
+      </tr>
+
+      <!-- ESPAÑA -->
+      <tr>
+        <td class="country-cell">
+          <span class="rank-badge r5">5</span>
+          <span class="flag-name">España</span>
+          <div class="pop">47M hab.</div>
+          <span class="recommend-chip chip-wait">Sprint 3 o 4</span>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">€2.150M formación anual</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">3</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">Mercado saturado</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">5</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">Muy maduro digital</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">EUR / Stripe</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">4</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">LinkedIn muy activo</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">2</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">Prefieren local</div>
+        </td>
+        <td>
+          <div class="score-wrap"><span class="score-num" style="color:#993556">2</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:#D4537E"></div></div></div>
+          <div class="tag-sm">+6h Colombia</div>
+        </td>
+        <td class="total-cell" style="color:#993556">25/35</td>
+        <td class="insight-cell">Liderazgo y soft skills crecen 12% anual. Mercado enorme y maduro pero la diferencia horaria (+6h) y la preferencia por proveedores locales alargan el ciclo de venta.</td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div class="section-hdr">Resumen — ranking final</div>
+  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:4px;">
+    <div style="text-align:center;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 8px;border:2px solid #378ADD;">
+      <div style="font-size:11px;color:#185FA5;font-weight:500;margin-bottom:6px">🥇 México</div>
+      <div style="font-size:22px;font-weight:500;color:#185FA5">31</div>
+      <div style="font-size:10px;color:var(--color-text-secondary)">/ 35</div>
+    </div>
+    <div style="text-align:center;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 8px;">
+      <div style="font-size:11px;color:#3B6D11;font-weight:500;margin-bottom:6px">🥈 Chile</div>
+      <div style="font-size:22px;font-weight:500;color:#3B6D11">27</div>
+      <div style="font-size:10px;color:var(--color-text-secondary)">/ 35</div>
+    </div>
+    <div style="text-align:center;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 8px;">
+      <div style="font-size:11px;color:#BA7517;font-weight:500;margin-bottom:6px">🥉 Perú</div>
+      <div style="font-size:22px;font-weight:500;color:#BA7517">26</div>
+      <div style="font-size:10px;color:var(--color-text-secondary)">/ 35</div>
+    </div>
+    <div style="text-align:center;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 8px;">
+      <div style="font-size:11px;color:#5F5E5A;font-weight:500;margin-bottom:6px">4 · España</div>
+      <div style="font-size:22px;font-weight:500;color:#5F5E5A">25</div>
+      <div style="font-size:10px;color:var(--color-text-secondary)">/ 35</div>
+    </div>
+    <div style="text-align:center;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 8px;">
+      <div style="font-size:11px;color:#5F5E5A;font-weight:500;margin-bottom:6px">5 · Costa Rica</div>
+      <div style="font-size:22px;font-weight:500;color:#5F5E5A">24</div>
+      <div style="font-size:10px;color:var(--color-text-secondary)">/ 35</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-top:16px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary);">
+    Fuentes: Mercer Tendencias Globales de Talento 2025 · EY Perú Premio ABE 2025 · Factor Wellbeing México 2025 · CICR Foro Talento Humano CR 2025 · Randstad Workmonitor Chile 2025 · Análisis de formación empresarial España 2025
+  </div>
+</div>

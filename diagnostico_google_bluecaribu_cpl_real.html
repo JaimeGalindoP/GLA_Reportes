@@ -1,0 +1,251 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.w{padding:1rem 0;font-family:var(--font-sans);}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;}
+.mv{font-size:22px;font-weight:500;}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.div{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:1.25rem 0;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:1rem;}
+.alert{border-left:4px solid;padding:14px 16px;margin-bottom:10px;border-radius:0;}
+.al-r{border-color:#E24B4A;background:#FCEBEB22;}
+.al-a{border-color:#EF9F27;background:#FAEEDA22;}
+.al-g{border-color:#639922;background:#EAF3DE22;}
+.al-b{border-color:#378ADD;background:#E6F1FB22;}
+.at{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.as{font-size:11px;color:var(--color-text-secondary);line-height:1.6;}
+.tbl{width:100%;font-size:11px;border-collapse:collapse;}
+.tbl th{color:var(--color-text-secondary);font-weight:500;padding:5px 10px 8px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:10px;text-align:left;}
+.tbl th.r{text-align:right;}
+.tbl td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle;}
+.tbl td.r{text-align:right;white-space:nowrap;}
+.tbl tr:hover td{background:var(--color-background-secondary);}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:3px;white-space:nowrap;}
+.p-g{background:#EAF3DE;color:#3B6D11;}
+.p-a{background:#FAEEDA;color:#854F0B;}
+.p-r{background:#FCEBEB;color:#A32D2D;}
+.p-b{background:#E6F1FB;color:#185FA5;}
+.big-number{font-size:42px;font-weight:600;line-height:1;}
+.bar-bg{background:var(--color-background-secondary);border-radius:3px;height:10px;}
+.bar-in{height:10px;border-radius:3px;}
+</style>
+
+<div class="w">
+
+<div class="sec">El hallazgo más importante de toda la sesión</div>
+
+<div class="alert al-r">
+  <div class="at">BlueCaribu gestionó $28.8M COP en Google Ads y generó 115 leads reales en el CRM</div>
+  <div class="as">Google Ads reporta 620 "conversiones" — pero solo el 18.5% de esas conversiones llegó como lead real a Clientify. Las otras 505 fueron clics en botones del sitio web, llamadas no registradas, o formularios abandonados. El CPL real no es $46,461 COP como muestra Google: es <strong>$250,487 COP por lead</strong>.</div>
+</div>
+
+<div class="sec">CPL real vs. lo que reporta Google vs. Meta</div>
+<div class="g4">
+  <div class="mc">
+    <div class="ml">CPL real Google (gasto ÷ leads CRM)</div>
+    <div class="big-number" style="color:#E24B4A;">$250K</div>
+    <div class="ms">COP por lead real en Clientify</div>
+  </div>
+  <div class="mc">
+    <div class="ml">CPL que reporta Google Ads</div>
+    <div class="mv" style="color:#854F0B;">$46,461</div>
+    <div class="ms">COP — incluye clics que no son leads</div>
+  </div>
+  <div class="mc">
+    <div class="ml">CPL real Meta (referencia 2025)</div>
+    <div class="mv" style="color:#378ADD;">$20,149</div>
+    <div class="ms">COP por lead confirmado en CRM</div>
+  </div>
+  <div class="mc">
+    <div class="ml">Google es más caro que Meta en</div>
+    <div class="big-number" style="color:#E24B4A;">12x</div>
+    <div class="ms">veces — por lead real</div>
+  </div>
+</div>
+
+<div class="sec">De $28.8M invertidos en Google · ¿qué pasó realmente?</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl">
+<thead><tr>
+  <th style="width:38%;">Métrica</th>
+  <th class="r" style="width:20%;">Lo que reporta Google</th>
+  <th class="r" style="width:20%;">Realidad (CRM)</th>
+  <th style="width:22%;">Brecha</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td><strong>"Conversiones" registradas</strong></td>
+    <td class="r">620</td>
+    <td class="r" style="color:#E24B4A;font-weight:500;">115 leads reales</td>
+    <td><span class="pill p-r">Solo 18.5% llegó al CRM</span></td>
+  </tr>
+  <tr style="background:var(--color-background-secondary);">
+    <td><strong>Costo por conversión</strong></td>
+    <td class="r">$46,461 COP</td>
+    <td class="r" style="color:#E24B4A;font-weight:500;">$250,487 COP</td>
+    <td><span class="pill p-r">5.4x más caro de lo que parece</span></td>
+  </tr>
+  <tr>
+    <td><strong>Leads que llegaron a matrícula</strong></td>
+    <td class="r">—</td>
+    <td class="r" style="color:#E24B4A;font-weight:500;">1 matrícula</td>
+    <td><span class="pill p-r">$28.8M por 1 estudiante</span></td>
+  </tr>
+  <tr style="background:var(--color-background-secondary);">
+    <td><strong>Costo por matrícula efectiva</strong></td>
+    <td class="r">—</td>
+    <td class="r" style="color:#E24B4A;font-weight:500;">$28,806,034 COP</td>
+    <td><span class="pill p-r">ROI negativo: 0.49x</span></td>
+  </tr>
+  <tr>
+    <td><strong>Leads calientes o clientes</strong></td>
+    <td class="r">—</td>
+    <td class="r" style="color:#854F0B;font-weight:500;">5 (4.3%)</td>
+    <td><span class="pill p-a">78% sin clasificar</span></td>
+  </tr>
+  <tr style="background:var(--color-background-secondary);">
+    <td><strong>Promedio leads/mes</strong></td>
+    <td class="r">—</td>
+    <td class="r">11.5 leads/mes</td>
+    <td><span class="pill p-a">vs. 54 leads/mes de Meta</span></td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="sec">Calidad de los 115 leads de Google en Clientify</div>
+<div class="card" style="padding:16px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;">Distribución por status</div>
+      <div style="position:relative;height:180px;"><canvas id="statusChart"></canvas></div>
+    </div>
+    <div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:12px;">Leads por mes (jul 2025 – abr 2026)</div>
+      <div style="position:relative;height:180px;"><canvas id="mensualChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<div class="div"></div>
+<div class="sec">3 hallazgos adicionales del CRM</div>
+
+<div class="alert al-r">
+  <div class="at">78% de los leads están "en oportunidad" — sin clasificar, sin seguimiento</div>
+  <div class="as">90 de 115 leads están en el estado genérico "en oportunidad". Nadie los ha marcado como caliente, templado o frío. Eso significa que BlueCaribu entrega el lead y nadie en el colegio hace el seguimiento estructurado. El problema no es solo la pauta — es que los leads que llegan no se trabajan.</div>
+</div>
+
+<div class="alert al-r">
+  <div class="at">Atribución confirmada como incorrecta — todos aparecen como de i&Q</div>
+  <div class="as">El 96% de los leads de BlueCaribu tienen como propietario "Desarrollo IQ & Partners". La automatización que creó i&Q sobreescribió la fuente original de BlueCaribu. Esto significa que los reportes de i&Q están inflados con leads que no generaron. Tu reunión de mañana es crítica — hay que restaurar la trazabilidad antes de cualquier decisión de renovación de contrato.</div>
+</div>
+
+<div class="alert al-a">
+  <div class="at">Hay 2 leads de Meta mezclados en el export de Google</div>
+  <div class="as">Dos contactos tienen la etiqueta "facebook-ads-lead" pero aparecen en la landing de BlueCaribu. Esto confirma que las etiquetas están mezcladas y que los datos de atribución actuales no son confiables para tomar decisiones. El CPL real de cada canal es desconocido hasta que se corrija el tracking.</div>
+</div>
+
+<div class="div"></div>
+<div class="sec">Comparación directa de canales · con datos reales</div>
+<div class="card" style="padding:0;overflow:hidden;">
+<table class="tbl">
+<thead><tr>
+  <th style="width:22%;">Canal</th>
+  <th class="r">Gasto</th>
+  <th class="r">Leads CRM</th>
+  <th class="r">CPL real</th>
+  <th class="r">Matrículas</th>
+  <th class="r">Costo/matrícula</th>
+  <th>Veredicto</th>
+</tr></thead>
+<tbody>
+  <tr>
+    <td><strong>Meta (i&Q) 2025</strong></td>
+    <td class="r">$6.8M</td>
+    <td class="r">339</td>
+    <td class="r" style="color:#378ADD;font-weight:500;">$20,149</td>
+    <td class="r">77</td>
+    <td class="r" style="color:#378ADD;">$88,707</td>
+    <td><span class="pill p-g">✓ Mantener y escalar</span></td>
+  </tr>
+  <tr style="background:var(--color-background-secondary);">
+    <td><strong>Google (BlueCaribu) 2025</strong></td>
+    <td class="r">$28.8M</td>
+    <td class="r">115</td>
+    <td class="r" style="color:#E24B4A;font-weight:500;">$250,487</td>
+    <td class="r">1</td>
+    <td class="r" style="color:#E24B4A;">$28,806,034</td>
+    <td><span class="pill p-r">✗ Reestructurar urgente</span></td>
+  </tr>
+  <tr>
+    <td><strong>PMax marca (dentro Google)</strong></td>
+    <td class="r">~$4.4M</td>
+    <td class="r">Est. ~30</td>
+    <td class="r" style="color:#854F0B;font-weight:500;">~$147K</td>
+    <td class="r">—</td>
+    <td class="r">—</td>
+    <td><span class="pill p-a">Solo defensa de marca</span></td>
+  </tr>
+  <tr style="background:var(--color-background-secondary);">
+    <td><strong>Meta objetivo 2026</strong></td>
+    <td class="r">$22M prop.</td>
+    <td class="r">2,200</td>
+    <td class="r" style="color:#639922;font-weight:500;">$10,000</td>
+    <td class="r">Est. 200+</td>
+    <td class="r" style="color:#639922;">$110,000</td>
+    <td><span class="pill p-g">✓ Foco aquí</span></td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="div"></div>
+<div class="sec">Decisión sobre BlueCaribu · qué llevar a la reunión</div>
+
+<div class="alert al-r">
+  <div class="at">La pregunta central para mañana con i&Q y para la próxima con BlueCaribu</div>
+  <div class="as">
+    Con datos en mano: <strong>$28.8M invertidos → 115 leads → 1 matrícula → ROI de 0.49x.</strong><br><br>
+    La conversación no es "¿están haciendo bien su trabajo?" — es "¿tiene sentido seguir invirtiendo $11.2M anuales en esta agencia para este canal cuando Meta genera leads 12 veces más baratos?"<br><br>
+    Opciones concretas:<br>
+    (1) Eliminar Google Search completamente. Mantener solo PMax de captura de marca con $5M/año.<br>
+    (2) Darle a BlueCaribu 60 días para bajar el CPL real (en CRM) a menos de $80K — con seguimiento semanal y acceso al CRM. Si no lo logran, no se renueva.<br>
+    (3) Transferir la cuenta de Google a i&Q y que la gestionen con las correcciones que ya definimos.
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+new Chart(document.getElementById('statusChart'),{
+  type:'doughnut',
+  data:{
+    labels:['En oportunidad (78%)','No calificado (8%)','Frío (4%)','Caliente (3%)','Perdido (3%)','Cliente (1%)','Otros (3%)'],
+    datasets:[{data:[90,9,5,4,4,1,2],backgroundColor:['#B4B2A9','#E24B4A','#85B7EB','#EF9F27','#F09595','#639922','#D3D1C7'],borderWidth:0}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:{size:9},padding:4,boxWidth:8}}}}
+});
+
+new Chart(document.getElementById('mensualChart'),{
+  type:'bar',
+  data:{
+    labels:['Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26'],
+    datasets:[{
+      data:[13,7,23,11,18,9,17,6,9,2],
+      backgroundColor:'#E24B4A88',
+      borderRadius:3
+    }]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{
+      x:{grid:{display:false},ticks:{color:'#888',font:{size:9}}},
+      y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:'#888',font:{size:10}},max:28}
+    }
+  }
+});
+</script>

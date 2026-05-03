@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Brújula del Líder Consciente — Jaime Galindo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0A1628;
+    --blue: #1A3A6B;
+    --blue-mid: #1e4d8c;
+    --orange: #E8921A;
+    --orange-light: #f4a83a;
+    --light-blue: #D6E4F7;
+    --gray: #F2F5FA;
+    --white: #FFFFFF;
+    --text: #0A1628;
+  }
+
+  html, body {
+    background: var(--navy);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-x: hidden;
+    background: var(--navy);
+  }
+
+  .page {
+    width: 900px;
+    max-width: 100%;
+    position: relative;
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .eyebrow {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .title span {
+    color: var(--orange);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  /* Outer frame */
+  .outer-frame {
+    position: relative;
+    border: 1.5px solid rgba(232, 146, 26, 0.25);
+    border-radius: 24px;
+    padding: 60px 40px 50px;
+    background: linear-gradient(135deg, rgba(26,58,107,0.15) 0%, rgba(10,22,40,0.4) 100%);
+    animation: fadeUp 0.9s ease 0.2s both;
+  }
+
+  .frame-label {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    padding: 4px 20px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 1.5px solid rgba(232,146,26,0.3);
+    border-radius: 20px;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .frame-label-bottom {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    padding: 6px 28px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--navy);
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 20px;
+  }
+
+  /* SVG diagram */
+  .diagram-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg.diagram {
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Node circles */
+  .node-outer {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .node-outer:hover { transform: scale(1.08); }
+  .node-outer:hover .node-glow { opacity: 1; }
+
+  .node-glow {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Lines */
+  .connect-line {
+    stroke: rgba(232,146,26,0.2);
+    stroke-width: 1.5;
+    fill: none;
+    transition: stroke 0.3s;
+  }
+
+  .connect-line-center {
+    stroke: rgba(232,146,26,0.35);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+    fill: none;
+  }
+
+  /* Legend / descriptions */
+  .legend {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: background 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .legend-item:hover {
+    background: rgba(232,146,26,0.07);
+    border-color: rgba(232,146,26,0.25);
+  }
+
+  .legend-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .num-orange { background: var(--orange); color: var(--navy); }
+  .num-blue { background: var(--blue-mid); color: var(--white); border: 1.5px solid rgba(232,146,26,0.5); }
+
+  .legend-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .legend-text p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+  }
+
+  /* Center special item */
+  .legend-center {
+    grid-column: 1 / -1;
+    background: rgba(5,13,26,0.8);
+    border-color: rgba(232,146,26,0.4);
+    border-style: dashed;
+  }
+  .legend-center .legend-text strong { color: var(--orange); font-size: 14px; }
+  .legend-center .legend-text p { color: rgba(255,255,255,0.45); font-style: italic; }
+  .num-mystery { background: #050d1a; color: var(--orange); border: 1.5px dashed rgba(232,146,26,0.6); font-size: 16px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+  .footer p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .footer span { color: var(--orange); }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; r: 52; }
+    50% { opacity: 1; r: 56; }
+  }
+  .pulse-ring { animation: pulse 2.5s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">Jaime Galindo · Academia de Crecimiento Consciente</div>
+    <h1 class="title">La Brújula del<br><span>Líder Consciente</span></h1>
+    <p class="subtitle">Un sistema integrado de 6 capacidades que orienta al líder desde adentro</p>
+  </div>
+
+  <div class="outer-frame">
+    <div class="frame-label">La Brújula del Líder Consciente</div>
+
+    <div class="diagram-wrap">
+      <svg class="diagram" viewBox="0 0 700 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Gradients for nodes -->
+          <radialGradient id="gOuter" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#2a5db0"/>
+            <stop offset="100%" stop-color="#0e2a55"/>
+          </radialGradient>
+          <radialGradient id="gCenter" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#e8921a"/>
+            <stop offset="100%" stop-color="#b86d0a"/>
+          </radialGradient>
+          <radialGradient id="gGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#e8921a" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#e8921a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="gGlowBlue" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4a90d9" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#4a90d9" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+          </filter>
+          <filter id="glow-filter">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Node positions:
+          Center (7): 350, 260
+          1 (top right): 530, 130
+          2 (right): 580, 280
+          3 (bottom right): 480, 410
+          4 (bottom left): 220, 410
+          5 (left): 120, 280
+          6 (top left): 170, 130
+        -->
+
+        <!-- Outer hexagon connection lines -->
+        <line class="connect-line" x1="530" y1="130" x2="580" y2="280"/>
+        <line class="connect-line" x1="580" y1="280" x2="480" y2="410"/>
+        <line class="connect-line" x1="480" y1="410" x2="220" y2="410"/>
+        <line class="connect-line" x1="220" y1="410" x2="120" y2="280"/>
+        <line class="connect-line" x1="120" y1="280" x2="170" y2="130"/>
+        <line class="connect-line" x1="170" y1="130" x2="530" y2="130"/>
+
+        <!-- Skip connections (diagonals across hexagon) -->
+        <line class="connect-line" x1="530" y1="130" x2="220" y2="410"/>
+        <line class="connect-line" x1="580" y1="280" x2="170" y2="130"/>
+        <line class="connect-line" x1="480" y1="410" x2="120" y2="280"/>
+
+        <!-- Center to outer lines -->
+        <line class="connect-line-center" x1="350" y1="260" x2="530" y2="130"/>
+        <line class="connect-line-center" x1="350" y1="260" x2="580" y2="280"/>
+        <line class="connect-line-center" x1="350" y1="260" x2="480" y2="410"/>
+        <line class="connect-line-center" x1="350" y1="260" x2="220" y2="410"/>
+        <line class="connect-line-center" x1="350" y1="260" x2="120" y2="280"/>
+        <line class="connect-line-center" x1="350" y1="260" x2="170" y2="130"/>
+
+        <!-- NODE 1 — Liderazgo e Identidad (top right) -->
+        <g class="node-outer" transform="translate(530,130)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">1</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">IDENTIDAD</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">Y MENTALIDAD</text>
+          <!-- Label outside -->
+          <text x="64" y="-28" text-anchor="start" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">Liderazgo</text>
+          <text x="64" y="-14" text-anchor="start" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">e Identidad</text>
+        </g>
+
+        <!-- NODE 2 — Comunicación e Influencia (right) -->
+        <g class="node-outer" transform="translate(580,280)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">2</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">COMUNICACIÓN</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">E INFLUENCIA</text>
+          <text x="64" y="-14" text-anchor="start" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">PNL Aplicada</text>
+          <text x="64" y="0" text-anchor="start" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">al Liderazgo</text>
+        </g>
+
+        <!-- NODE 3 — Inteligencia Emocional (bottom right) -->
+        <g class="node-outer" transform="translate(480,410)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">3</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">INTELIGENCIA</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">EMOCIONAL</text>
+          <text x="44" y="44" text-anchor="middle" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">Autoconocimiento</text>
+          <text x="44" y="58" text-anchor="middle" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">y Regulación</text>
+        </g>
+
+        <!-- NODE 4 — Gestión del Cambio (bottom left) -->
+        <g class="node-outer" transform="translate(220,410)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">4</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">GESTIÓN</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">DEL CAMBIO</text>
+          <text x="-44" y="44" text-anchor="middle" font-family="Outfit, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.5)">ADKAR · REDUCE</text>
+          <text x="-44" y="58" text-anchor="middle" font-family="Outfit, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.5)">Lewin</text>
+        </g>
+
+        <!-- NODE 5 — Conversaciones y Confianza (left) -->
+        <g class="node-outer" transform="translate(120,280)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">5</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">CONVER-</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">SACIONES</text>
+          <text x="-64" y="-14" text-anchor="end" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">Confianza</text>
+          <text x="-64" y="0" text-anchor="end" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">y Feedback</text>
+        </g>
+
+        <!-- NODE 6 — Cultura y Alto Desempeño (top left) -->
+        <g class="node-outer" transform="translate(170,130)">
+          <circle class="node-glow" cx="0" cy="0" r="72" fill="url(#gGlowBlue)"/>
+          <circle cx="0" cy="0" r="52" fill="url(#gOuter)" filter="url(#shadow)" stroke="rgba(232,146,26,0.35)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="44" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          <text x="0" y="-12" text-anchor="middle" font-family="Playfair Display, serif" font-size="22" font-weight="700" fill="#E8921A">6</text>
+          <text x="0" y="6" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">CULTURA Y</text>
+          <text x="0" y="18" text-anchor="middle" font-family="Outfit, sans-serif" font-size="9" font-weight="600" fill="rgba(255,255,255,0.9)" letter-spacing="0.5">ALTO DESEMP.</text>
+          <text x="-64" y="-28" text-anchor="end" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">Equipos de</text>
+          <text x="-64" y="-14" text-anchor="end" font-family="Outfit, sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.5)">Alto Rendimiento</text>
+        </g>
+
+        <!-- NODE 7 — CENTER — LOCKED / MYSTERY -->
+        <g class="node-outer" transform="translate(350,260)">
+          <!-- Pulse rings -->
+          <circle class="pulse-ring" cx="0" cy="0" r="62" fill="none" stroke="rgba(232,146,26,0.12)" stroke-width="2"/>
+          <circle class="node-glow" cx="0" cy="0" r="90" fill="url(#gGlow)"/>
+          <!-- Outer decorative ring dashed -->
+          <circle cx="0" cy="0" r="74" fill="none" stroke="rgba(232,146,26,0.18)" stroke-width="1" stroke-dasharray="3 6"/>
+          <!-- Dark mysterious circle -->
+          <circle cx="0" cy="0" r="62" fill="#050d1a" filter="url(#shadow)" stroke="rgba(232,146,26,0.5)" stroke-width="2"/>
+          <circle cx="0" cy="0" r="54" fill="none" stroke="rgba(232,146,26,0.15)" stroke-width="1"/>
+          <!-- Lock icon body -->
+          <rect x="-14" y="-4" width="28" height="20" rx="4" fill="none" stroke="rgba(232,146,26,0.8)" stroke-width="2"/>
+          <!-- Lock shackle -->
+          <path d="M -8,-4 L -8,-12 Q -8,-20 0,-20 Q 8,-20 8,-12 L 8,-4" fill="none" stroke="rgba(232,146,26,0.8)" stroke-width="2" stroke-linecap="round"/>
+          <!-- Lock keyhole -->
+          <circle cx="0" cy="6" r="3" fill="rgba(232,146,26,0.6)"/>
+          <rect x="-1.5" y="6" width="3" height="5" rx="1" fill="rgba(232,146,26,0.6)"/>
+          <!-- Text below lock -->
+          <text x="0" y="38" text-anchor="middle" font-family="Outfit, sans-serif" font-size="7.5" font-weight="700" fill="rgba(232,146,26,0.7)" letter-spacing="1.5">EL NÚCLEO</text>
+          <text x="0" y="50" text-anchor="middle" font-family="Outfit, sans-serif" font-size="7" font-weight="500" fill="rgba(255,255,255,0.35)" letter-spacing="1">PRÓXIMAMENTE</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="frame-label-bottom">El Líder que Sabe Y Puede</div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+
+    <div class="legend-item legend-center">
+      <div class="legend-number num-mystery">?</div>
+      <div class="legend-text">
+        <strong>El Núcleo — Próximamente en el libro</strong>
+        <p>Hay un elemento que determina si los otros 6 nodos funcionan o se bloquean. Es el motor de todo el sistema. Se revela completo en <em>Las 4 Rs del Cambio</em> — el primer libro de Jaime Galindo.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">1</div>
+      <div class="legend-text">
+        <strong>Identidad y Mentalidad</strong>
+        <p>Quién crees que eres como líder. Niveles neurológicos de Dilts, creencias limitantes, mentalidad de crecimiento.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">2</div>
+      <div class="legend-text">
+        <strong>Comunicación e Influencia</strong>
+        <p>PNL aplicada. Metamodelo, rapport, lenguaje de influencia, microexpresiones, comunicación no verbal.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">3</div>
+      <div class="legend-text">
+        <strong>Inteligencia Emocional</strong>
+        <p>Autoconciencia, regulación y empatía. TMMS-24, tabla periódica de emociones, gestión del propio estado.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">4</div>
+      <div class="legend-text">
+        <strong>Gestión del Cambio</strong>
+        <p>ADKAR (Prosci) · REDUCE — los 5 frenos del cambio (Jonah Berger) · Campo de Fuerzas (Kurt Lewin). Cómo leer dónde está el equipo y qué palanca activar.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">5</div>
+      <div class="legend-text">
+        <strong>Conversaciones y Confianza</strong>
+        <p>Feedback, feedforward, conversaciones difíciles, seguridad psicológica. Gottman aplicado al trabajo.</p>
+      </div>
+    </div>
+
+    <div class="legend-item">
+      <div class="legend-number num-blue">6</div>
+      <div class="legend-text">
+        <strong>Cultura y Alto Desempeño</strong>
+        <p>Curva de rendimiento de equipos, cohesión, propósito compartido. Lo que el líder construye cuando los 5 nodos funcionan.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p><span>@jaimegalindo</span> · accinternacional.com · Academia de Crecimiento Consciente</p>
+  </div>
+
+</div>
+
+</body>
+</html>
